@@ -11,8 +11,10 @@
                 console.error(error)
             })
             .done(function (experience) {
+                console.log('works')
                 const draggingPlugin = document.getElementById("ceros-draggable-carousel-plugin")
                 let mainDocument = document.querySelector('div#main.document')
+                console.log(mainDocument)
                 let pageTop = mainDocument.querySelector("div.page-viewport.top")
                 let pageContainer = pageTop.querySelector("div.page-container")
                 let pageScroll = pageContainer.querySelector(".page-scroll")
