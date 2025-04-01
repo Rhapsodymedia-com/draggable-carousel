@@ -20,7 +20,7 @@
                 // CREATING STYLE ELEMENT FOR REQUIRED CLASSES
                 let cssStyle = document.createElement('style')
                 cssStyle.id = 'carousel-additional-classes'
-                cssStyle.setAttribute('type', 'text/css')
+                cssStyle.type = 'text/css'
                 cssStyle.textContent = `
                     .temporary-disabled{ display: none !importnant; pointer-event: none !mportnant; }
                     .dragging-carousel{ cursor: grab !important }
@@ -34,26 +34,28 @@
                 if(cerosContext.previewMode===true && mainDocument.parentElement.classList.contains('-desktop')!=true)
                     isMobile = true
                 
+                // REMOVE DASHES AND REPLACE THEM WITH UPPERCASE LETTERS
+                const removeDashes = title => {
+                    let newTitle = title.split('-')
+                    for(let w=0; w<newTitle.length; w++){
+                        if(w===0)
+                            continue
+                        const firstLetter = newTitle[w][0]
+                        newTitle[w] = newTitle[w].replace(firstLetter, firstLetter.toUpperCase())
+                    }
+                    return newTitle.join('')
+                }
+
                 // DEFINING GLOBAL CAROUSELS VALUES
                 let attributesNames = ['drag-intensity', 'effects-intensity', 'effects-duration', 'sliding-indicator', 'snapping-duration']
                 const globalProperties = {}
                 for(let attributeName of attributesNames){
-                    let convertedName = attributeName.split('-')
-                    for(let w=0; w<convertedName.length; w++){
-                        if(w===0)
-                            continue
-                        const firstLetter = convertedName[w][0]
-                        convertedName[w] = convertedName[w].replace(firstLetter, firstLetter.toUpperCase())
-                    }
-                    convertedName = convertedName.join('')
-
                     let attr = draggingPlugin.getAttribute(attributeName)
                     if(attr==null)
                         console.warn('missing attribute in Draggable Carousel')
                     let attributeValues = attr.split(',')
                     let attributeValue = (isMobile===true && attributeValues[1]!=undefined) ? attributeValues[1] : attributeValues[0]
-
-                    Object.defineProperty(globalProperties, convertedName, {value: parseFloat(attributeValue)})
+                    Object.defineProperty(globalProperties, removeDashes(attributeName), {value: parseFloat(attributeValue)})
                 }
 
                 // MISCELLANEOUS VARIABLES
@@ -278,7 +280,7 @@
                                         break
                                     case 'rotate' || 'skew-x' || 'skew-y':
                                         let tra = check ? `${effectParameters.intensinity*progressRange*direction+parseFloat(idleState)}deg` : idleState
-                                        element.style.setProperty('transform', `${effectName}(${tra})`)
+                                        element.style.setProperty('transform', `${removeDashes(effectName)}(${tra})`)
                                         break
                                     case 'scale' || 'opacity':
                                         let sca = check ? `${effectParameters.intensinity*progressRange}` : idleState
