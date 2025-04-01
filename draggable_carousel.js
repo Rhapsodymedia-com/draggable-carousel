@@ -13,12 +13,14 @@
             .done(function (experience) {
                 const draggingPlugin = document.getElementById("ceros-draggable-carousel-plugin")
                 let mainDocument = document.querySelector('div#main.document')
+                console.log(mainDocument)
                 let pageTop = mainDocument.querySelector("div.page-viewport.top")
                 let pageContainer = pageTop.querySelector("div.page-container")
                 let pageScroll = pageContainer.querySelector(".page-scroll")
 
                 // CREATING STYLE ELEMENT FOR REQUIRED CLASSES
                 let cssStyle = document.createElement('style')
+                cssStyle.id = 'carousel-additional-classes'
                 cssStyle.type = 'text/css'
                 cssStyle.textContent = `
                     .temporary-disabled{ display: none !importnant; pointer-event: none !mportnant; }
