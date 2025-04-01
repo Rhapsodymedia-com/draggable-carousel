@@ -220,6 +220,7 @@
                                     effectParameters.duration = floatValues[1] ?? effectParameters.duration
                                     effectParameters.isProgressive = effectPara.includes('progressive')===true
                                 }
+                                effectName = removeDashes(effectName)
 
                                 // DEFINING PROGRESS OF DRAGGING THROUGH A CAROUSEL
                                 let progressRanges = new Array( Object.keys(this.setup.range).length )
@@ -246,7 +247,7 @@
                                         element.style.setProperty('transition-property', comma)
                                         element.style.setProperty('transition-duration', comma)
                                     }
-                                    if(effectName==='rotate' || effectName==='skew-x' || effectName==='skew-y'){
+                                    if(effectName==='rotate' || effectName==='skewX' || effectName==='skewY'){
                                         initialValue = '0deg'
                                         element.style.transitionProperty += `${comma}transform`
                                         element.style.transitionDuration += `${comma}${effectParameters.duration}ms`
@@ -274,15 +275,19 @@
                                 let check = (isDragged===true || effectParameters.isProgressive===true)
                                 let idleState = layer.idleStates!=undefined ? layer.idleStates[effectName] : initialStates[effectName]
                                 switch(effectName){
-                                    case 'width' || 'height':
+                                    case 'width':
+                                    case 'height':
                                         let len = check ? `${effectParameters.intensinity*progressRange*parseFloat(idleState)}px` : idleState
                                         element.style.setProperty(effectName, len)
                                         break
-                                    case 'rotate' || 'skew-x' || 'skew-y':
+                                    case 'rotate':
+                                    case 'skewX':
+                                    case 'skewY':
                                         let tra = check ? `${effectParameters.intensinity*progressRange*direction+parseFloat(idleState)}deg` : idleState
-                                        element.style.setProperty('transform', `${removeDashes(effectName)}(${tra})`)
+                                        element.style.setProperty('transform', `${effectName}(${tra})`)
                                         break
-                                    case 'scale' || 'opacity':
+                                    case 'scale':
+                                    case 'opacity':
                                         let sca = check ? `${effectParameters.intensinity*progressRange}` : idleState
                                         element.style.setProperty(effectName, sca)
                                         break
@@ -382,7 +387,7 @@
                             this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
                         })
-                        this.updateChildrenStyling(newDirection, true)
+                        this.updateChildrenStyling(newDirection, false)
                     }
 
                     refreshOldValue(){
