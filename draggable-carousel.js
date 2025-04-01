@@ -12,8 +12,7 @@
             })
             .done(function (experience) {
                 const draggingPlugin = document.getElementById("ceros-draggable-carousel-plugin")
-                console.log(document.getElementById('main'), document.querySelector('div#main'),document.querySelector('div.document'))
-                let mainDocument = document.querySelector('div#main.document')
+                let mainDocument = document.getElementById('main')
                 let pageTop = mainDocument.querySelector("div.page-viewport.top")
                 let pageContainer = pageTop.querySelector("div.page-container")
                 let pageScroll = pageContainer.querySelector(".page-scroll")
