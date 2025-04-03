@@ -614,6 +614,7 @@
                         const dir = settings.isFreeMovementActive===true ? 'all' : settings.directionAxis
                         hammerObject.get('pan').set({ direction: Hammer[`DIRECTION_${dir.toUpperCase()}`]})
                         hammerObject.get('tap').set({ time: 100 })
+                        hammerObject.get('doubletap').set({ enable: false })
 
                         // INITIALIZING CAROUSEL FUNCTIONALITY
                         carouselsArray[i] = new Carousel(draggableCarousel, draggableCarousels[i], hammerObject, settings)
