@@ -22,7 +22,7 @@
                 cssStyle.id = 'carousel-additional-classes'
                 cssStyle.type = 'text/css'
                 cssStyle.textContent = `
-                    .temporary-disabled{ display: none !importnant; pointer-event: none !mportnant; }
+                    .temporary-disabled{ display: none !important; pointer-event: none !important; }
                     .dragging-carousel{ cursor: grab !important }
                     .dragging-carousel:active{ cursor: grabbing !important }
                 `
@@ -442,7 +442,7 @@
                         this.snapToPosition(multiplier==0)
                         this.updateOnDragging(multiplier)
                         this.refreshOldValue()
-                        this.updateChildrenStyling(0, false)
+                        this.updateChildrenStyling()
 
                         if(multiplier>0)
                             requestAnimationFrame(() => this.animateSliding(newTime, velocityValue))
