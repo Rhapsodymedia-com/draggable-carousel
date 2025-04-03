@@ -22,7 +22,7 @@
                 cssStyle.id = 'carousel-additional-classes'
                 cssStyle.type = 'text/css'
                 cssStyle.textContent = `
-                    .temporary-disabled{ display: none !important; pointer-event: none !important; }
+                    .temporary-disabled{ display: none !important; pointer-events: none !important; }
                     .dragging-carousel{ cursor: grab !important }
                     .dragging-carousel:active{ cursor: grabbing !important }
                 `
