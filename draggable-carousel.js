@@ -468,6 +468,7 @@
                             this.switchStates(false)
                             this.updateChildrenStyling()
                         })
+                        this.hammerObj.on('tap', ev => this.switchStates(false))
                     }
                 }
 
