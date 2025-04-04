@@ -609,7 +609,7 @@
 
                         // HAMMER.JS
                         const hammerObject = new Hammer(draggableCarousel)
-                        hammerObject.get('press').set({ time: 101 })
+                        hammerObject.get('press').set({ time: 251 })
                         settings.isFreeMovementActive = settings.directionAxis==='both' || settings.directionAxis==='all'
                         const dir = settings.isFreeMovementActive===true ? 'all' : settings.directionAxis
                         hammerObject.get('pan').set({ direction: Hammer[`DIRECTION_${dir.toUpperCase()}`], threshold: 1 })
