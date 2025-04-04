@@ -613,6 +613,11 @@
                         settings.isFreeMovementActive = settings.directionAxis==='both' || settings.directionAxis==='all'
                         const dir = settings.isFreeMovementActive===true ? 'all' : settings.directionAxis
                         hammerObject.get('pan').set({ direction: Hammer[`DIRECTION_${dir.toUpperCase()}`], threshold: 1 })
+                        hammerObject.get('pinch').set({ enable: false })
+                        hammerObject.get('rotate').set({ enable: false })
+                        hammerObject.get('swipe').set({ enable: false })
+                        hammerObject.get('tap').set({ enable: false })
+                        hammerObject.get('doubletap').set({ enable: false })
 
                         // INITIALIZING CAROUSEL FUNCTIONALITY
                         carouselsArray[i] = new Carousel(draggableCarousel, draggableCarousels[i], hammerObject, settings)
