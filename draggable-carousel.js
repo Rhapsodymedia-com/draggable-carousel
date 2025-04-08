@@ -125,15 +125,14 @@
                 const selectTheClosestNumber = (one, two, cur) => (Math.abs(two-cur) < Math.abs(one-cur)) ? two : one
                 const getDistance = (elem, prop) => {
                     let firstParent = elem.parentElement
-                    console.log(firstParent)
+                    console.log('firstParent: ', firstParent)
                     let coordinate = 0
-                    console.log(coordinate)
                     let tries = 0
                     while(firstParent.classList.contains('page-scroll')===false || tries>=50){
                         let secondParent = firstParent.parentElement
-                        console.log(secondParent)
+                        console.log('secondParent: ', secondParent)
                         coordinate += parseFloat( window.getComputedStyle(firstParent).getPropertyValue(prop) )
-                        console.log(coordinate)
+                        console.log('value: ', coordinate)
                         firstParent = secondParent
                         tries++
                     }
