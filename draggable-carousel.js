@@ -1,3 +1,4 @@
+console.log('working')
 (function(){
     'use strict';
     require.config({
