@@ -656,6 +656,7 @@
                                 val = parseFloat(val)
                             return val
                         }
+                        console.log(pageWidth, emptyShape.width, extraSpace)
                         const settings = {
                             effects: getEffects('drag-effect:'),
                             dragStrength: definePropertyValue('drag-intensity:', globalProperties.dragIntensity),
