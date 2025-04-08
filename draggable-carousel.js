@@ -1,4 +1,3 @@
-console.log('working');
 (function(){
     'use strict';
     require.config({
@@ -12,10 +11,8 @@ console.log('working');
                 console.error(error);
             })
             .done(function (experience) {
-                console.log('works00')
                 const draggingPlugin = document.getElementById("ceros-draggable-carousel-plugin")
                 let mainDocument = document.getElementById('main')
-                console.log(mainDocument)
                 let pageTop = mainDocument.querySelector("div.page-viewport.top")
                 let pageContainer = pageTop.querySelector("div.page-container")
                 let pageScroll = pageContainer.querySelector(".page-scroll")
@@ -80,7 +77,6 @@ console.log('working');
                 }
 
                 // MISCELLANEOUS FUNCTIONS
-                console.log('works01')
                 const addAccessibilityFunctionality = (cta, elementsArr) => {
                     let clickedHotspot = document.getElementById(cta.id)
                     const displays = elementsArr.map(dis => dis.style.display)
@@ -139,7 +135,6 @@ console.log('working');
                     }
                     return (parseFloat( window.getComputedStyle(elem).getPropertyValue(prop) ) + coordinate)
                 }
-                console.log('works02')
 
                 // CREATING CARUSELS BLUEPRINT
                 class Carousel{
@@ -549,12 +544,10 @@ console.log('working');
                 }
 
                 const pageChangedCallback = pag => {
-                    console.log('work')
                     pageTop = document.querySelector("div.page-viewport.top")
                     pageContainer = pageTop.querySelector("div.page-container")
                     pageScroll = pageContainer.querySelector(".page-scroll")
                     const pageWidth = parseFloat(pageScroll.style.width)
-                    console.log('works')
                     updateCanvasProportions()
 
                     // GOING THROUGH EVERY DRAGGABLE CAROUSEL OBJECT THAT ARE ON CURRENT PAGE
@@ -569,7 +562,6 @@ console.log('working');
                         let allTags = draggableCarousels[i].tags
 
                         // FINDING "EMPTY-SHAPE"
-                        console.log('works1')
                         let draggableCarouselChildren = draggableCarousels[i].items
                         let emptyShape = draggableCarouselChildren.find(lay => lay.tags.includes('empty-shape'))
                         if(emptyShape==undefined){
@@ -590,8 +582,6 @@ console.log('working');
                         }
 
                         // GRANTING ACCESSIBLITY FEATURE
-                        console.log('works2')
-                        console.log(cerosContext.featureFlags)
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
