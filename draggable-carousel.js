@@ -1,4 +1,4 @@
-console.log('working')
+console.log('working');
 (function(){
     'use strict';
     require.config({
@@ -9,7 +9,7 @@ console.log('working')
     require(['CerosSDK'], function (CerosSDK) {
         CerosSDK.findExperience()
             .fail(function (error) {
-                console.error(error)
+                console.error(error);
             })
             .done(function (experience) {
                 console.log('works00')
