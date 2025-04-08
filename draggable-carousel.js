@@ -125,15 +125,11 @@
                 const selectTheClosestNumber = (one, two, cur) => (Math.abs(two-cur) < Math.abs(one-cur)) ? two : one
                 const getDistance = (elem, prop) => {
                     let firstParent = elem.parentElement
-                    console.log('firstParent: ', firstParent)
                     let coordinate = 0
                     let tries = 0
-                    console.log('new: ', window.getComputedStyle(elem).getPropertyValue(prop))
                     while(firstParent.classList.contains('page-scroll')===false || tries>=50){
                         let secondParent = firstParent.parentElement
-                        console.log('secondParent: ', secondParent)
                         coordinate += parseFloat( window.getComputedStyle(firstParent).getPropertyValue(prop) )
-                        console.log('value: ', coordinate)
                         firstParent = secondParent
                         tries++
                     }
@@ -663,7 +659,6 @@
                                 val = parseFloat(val)
                             return val
                         }
-                        console.log(extraSpace)
                         const settings = {
                             effects: getEffects('drag-effect:'),
                             dragStrength: definePropertyValue('drag-intensity:', globalProperties.dragIntensity),
