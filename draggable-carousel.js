@@ -128,6 +128,7 @@
                     console.log('firstParent: ', firstParent)
                     let coordinate = 0
                     let tries = 0
+                    console.log('new: ', window.getComputedStyle(elem).getPropertyValue(prop))
                     while(firstParent.classList.contains('page-scroll')===false || tries>=50){
                         let secondParent = firstParent.parentElement
                         console.log('secondParent: ', secondParent)
