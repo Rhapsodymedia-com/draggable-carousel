@@ -82,6 +82,7 @@
                     const displays = elementsArr.map(dis => dis.style.display)
 
                     // WAITING TO FIND NEWLY OPENING POP-UP
+                    console.log('triggered')
                     setTimeout(() => {
                         if(clickedHotspot.focusOn==='empty')
                             return
@@ -95,7 +96,7 @@
                                     let outsidePopUpHotspots = hotspotsArray.filter(out => insidePopUpHotspots.includes(out)===false)
 
                                     // DISABLING HOTSPOTS IN A CAROUSEL WHICH ARE OUTSIDE CURRENT VISIBLE POP-UP
-                                    const toggleOtherHotspots = (tabNumber=-1) => outsidePopUpHotspots.forEach(outside => outside.tabIndex=tabNumber)
+                                    const toggleOtherHotspots = (tabNumber=-1) => {console.log(hotspotsArray,insidePopUpHotspots,outsidePopUpHotspots); outsidePopUpHotspots.forEach(outside => outside.tabIndex=tabNumber)}
                                     toggleOtherHotspots()
                                     clickedHotspot.addEventListener('click', clickEvent => toggleOtherHotspots())
 
@@ -585,14 +586,14 @@
                         }
 
                         // GRANTING ACCESSIBLITY FEATURE
-                        // if(cerosContext.featureFlags.Accessibility===true){
-                        //     let objectsArray = draggableCarousels[i].findAllComponents().layers
-                        //     let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
-                        //     let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
+                        if(cerosContext.featureFlags.Accessibility===true){
+                            let objectsArray = draggableCarousels[i].findAllComponents().layers
+                            let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
+                            let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
 
-                        //     for(let hotspotObject of hotspotsObjects)
-                        //         hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray))
-                        // }
+                            for(let hotspotObject of hotspotsObjects)
+                                hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray))
+                        }
 
                         // DEFINING CAROUSEL HORIZONTAL MARGINS
                         let extraSpace = 0
