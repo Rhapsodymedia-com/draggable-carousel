@@ -20,8 +20,8 @@
 
                 // CREATING STYLE ELEMENT FOR REQUIRED CLASSES
                 let cssStyle = document.createElement('style')
-                cssStyle.id = 'carousel-additional-classes'
-                cssStyle.type = 'text/css'
+                cssStyle.setAttribute('id', 'carousel-additional-classes')
+                cssStyle.setAttribute('type', 'text/css')
                 cssStyle.textContent = `
                     .temporary-disabled{ display: none !important; pointer-events: none !important; }
                     .dragging-carousel{ cursor: grab !important }
