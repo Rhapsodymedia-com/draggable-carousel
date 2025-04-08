@@ -129,7 +129,7 @@
                     let coordinate = 0
                     console.log(coordinate)
                     let tries = 0
-                    while(firstParent!=pageScroll || tries>=50){
+                    while(firstParent.classList.contains('page-scroll')===false || tries>=50){
                         let secondParent = firstParent.parentElement
                         console.log(secondParent)
                         coordinate += parseFloat( window.getComputedStyle(firstParent).getPropertyValue(prop) )
