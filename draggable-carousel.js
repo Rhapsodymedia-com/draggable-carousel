@@ -585,14 +585,14 @@
                         }
 
                         // GRANTING ACCESSIBLITY FEATURE
-                        if(cerosContext.featureFlags.Accessibility===true){
-                            let objectsArray = draggableCarousels[i].findAllComponents().layers
-                            let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
-                            let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
+                        // if(cerosContext.featureFlags.Accessibility===true){
+                        //     let objectsArray = draggableCarousels[i].findAllComponents().layers
+                        //     let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
+                        //     let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
 
-                            for(let hotspotObject of hotspotsObjects)
-                                hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray))
-                        }
+                        //     for(let hotspotObject of hotspotsObjects)
+                        //         hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray))
+                        // }
 
                         // DEFINING CAROUSEL HORIZONTAL MARGINS
                         let extraSpace = 0
