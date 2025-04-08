@@ -16,6 +16,7 @@
                 let pageTop = mainDocument.querySelector("div.page-viewport.top")
                 let pageContainer = pageTop.querySelector("div.page-container")
                 let pageScroll = pageContainer.querySelector(".page-scroll")
+                let proportions = 1
 
                 // CREATING STYLE ELEMENT FOR REQUIRED CLASSES
                 let cssStyle = document.createElement('style')
@@ -76,6 +77,50 @@
                 }
 
                 // MISCELLANEOUS FUNCTIONS
+                const addAccessibilityFunctionality = (cta, elementsArr) => {
+                    let clickedHotspot = document.getElementById(cta.id)
+                    const displays = elementsArr.map(dis => dis.style.display)
+
+                    // WAITING TO FIND NEWLY OPENING POP-UP
+                    setTimeout(() => {
+                        if(clickedHotspot.focusOn==='empty')
+                            return
+
+                        // APPLYING EVENT LISTENERS ON A LOOP THAT HAPPENS ONCE
+                        if(clickedHotspot.focusOn==undefined){
+                            for(let n=0; n<displays.length; n++){
+                                if(elementsArr[n].style.display!=displays[n]){
+                                    let hotspotsArray = elementsArr.filter(elementsAr => elementsAr.classList.contains('hotspot')===true)
+                                    let insidePopUpHotspots = Array.from(elementsArr[n].querySelectorAll('.hotspot'))
+                                    let outsidePopUpHotspots = hotspotsArray.filter(out => insidePopUpHotspots.includes(out)===false)
+
+                                    // DISABLING HOTSPOTS IN A CAROUSEL WHICH ARE OUTSIDE CURRENT VISIBLE POP-UP
+                                    const toggleOtherHotspots = (tabNumber=-1) => outsidePopUpHotspots.forEach(outside => outside.tabIndex=tabNumber)
+                                    toggleOtherHotspots()
+                                    clickedHotspot.addEventListener('click', clickEvent => toggleOtherHotspots())
+
+                                    // ENABLING BACK ALL HOTSPOTS IN A CAROUSEL
+                                    if(insidePopUpHotspots.length>0){
+                                        clickedHotspot.focusOn = insidePopUpHotspots[0]
+                                        let lastHotspot = insidePopUpHotspots[insidePopUpHotspots.length-1]
+                                        lastHotspot.addEventListener('click', clickEve => toggleOtherHotspots(0))
+                                        lastHotspot.focusOn = clickedHotspot
+                                    }
+                                    break
+                                }
+                            }
+                        }
+                        if(clickedHotspot.focusOn!=undefined){
+                            clickedHotspot.focusOn.focus()
+                            return
+                        }
+                        clickedHotspot.focusOn = 'empty'
+                    }, 50)
+                }
+                const updateCanvasProportions = () => {
+                    const proportion = pageTop.style.zoom!='' ? pageTop.style.zoom : pageTop.style.transform.split('(')[1].split(',')[0]
+                    proportions = parseFloat(proportion)
+                }
                 const sum = (accumulator, currentVal) => accumulator + currentVal
                 const selectTheClosestNumber = (one, two, cur) => (Math.abs(two-cur) < Math.abs(one-cur)) ? two : one
                 const getDistance = (elem, prop) => {
@@ -107,21 +152,21 @@
                     switchStates(hotspotChecker){
                         // DISABLING HOTSPOTS DURING DRAGGING
                         let hotspots = Array.from( this.mainElement.querySelectorAll('.hotspot') )
-                        for(let hotspot of hotspots){
-                            if(hotspotChecker===true && hotspot.style.display!='none'){
-                                hotspot.classList.add('temporary-disabled')
+                        for(let hotspotElem of hotspots){
+                            if(hotspotChecker===true && hotspotElem.style.display!='none'){
+                                hotspotElem.classList.add('temporary-disabled')
                                 continue
                             }
-                            hotspot.classList.remove('temporary-disabled')
+                            hotspotElem.classList.remove('temporary-disabled')
                         }
 
                         // STOPING VIDEOS DURING DRAGGING
                         let videos = Array.from( this.mainElement.querySelectorAll('.video') )
-                        for(let video of videos){
-                            let vid = video.querySelector('video')
-                            if(vid.autoplay===false){
-                                let vi = experience.findComponentById(video.id)
-                                vi.stopVideo()
+                        for(let videoElem of videos){
+                            let video = videoElem.querySelector('video')
+                            if(video.autoplay===false){
+                                let vid = experience.findComponentById(videoElem.id)
+                                vid.stopVideo()
                             }
                         }
                     }
@@ -183,9 +228,9 @@
                                 if(string.includes('snap-area')===true && this.setup.snapPositions==undefined){
                                     for(let s=0; s<set.coordinates.length; s++){
                                         const viewSpace = Object.values(this.setup.viewport)[s]
-                                        const startingPoint = parseFloat(element.style.getPropertyValue(set.coordinates[s]))
+                                        const startPoint = parseFloat(element.style.getPropertyValue(set.coordinates[s]))
                                         const centerPoint = parseFloat(element.style.getPropertyValue(set.dimensions[s]))/2
-                                        let snapPoint = viewSpace/2 - (startingPoint + centerPoint)
+                                        let snapPoint = viewSpace/2 - (startPoint + centerPoint)
                                         let coord = parseFloat(this.mainElement.style.getPropertyValue(set.coordinates[s]))
                                         snapPoint = Math.min(snapPoint, coord)
                                         snapPoint = Math.max(snapPoint, this.setup.range[set.dimensions[s]]+coord)
@@ -328,8 +373,7 @@
                     }
 
                     updateOnDragging(multi=1){
-                        let proportions = pageTop.style.zoom!='' ? pageTop.style.zoom : pageTop.style.transform.split('(')[1].split(',')[0]
-                        proportions = parseFloat(proportions)
+                        updateCanvasProportions()
                         
                         let power = this.setup.dragStrength * multi
                         let currentValues = Object.keys(this.setup.dragMovement.currentValue)
@@ -365,6 +409,31 @@
                         this.oldTime = currentTime
                     }
 
+                    updateScreenViewOnTab = keyEvent => {
+                        if(keyEvent.code==='Tab'){
+                            updateCanvasProportions()
+                            requestAnimationFrame(() => {
+                                let hotspotsElements = Array.from(this.mainElement.querySelectorAll('.hotspot'))
+                                for(let hotspotElement of hotspotsElements){
+                                    if(hotspotElement==document.activeElement){
+                                        for(let k=0; k<set.axises.length; k++){
+                                            let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
+                                            if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
+                                                let boundingClientRect = Math.round( hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions )
+                                                let previousValue = this.setup.dragMovement.oldValue[set.axises[k]]
+                                                previousValue -= boundingClientRect
+                                                let newViewport = -this.setup.viewport[set.dimensions[k]]
+                                                this.setup.dragMovement.currentValue[set.axises[k]] = newViewport<previousValue ? previousValue : newViewport
+                                            }
+                                        }
+                                        this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
+                                        this.refreshOldValue()
+                                    }
+                                }
+                            })
+                        }
+                    }
+
                     updateOnDragStart(){
                         let lastValue = 0
                         let newDirection = 1
@@ -387,6 +456,8 @@
                             this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
                         })
+
+                        window.addEventListener('keydown', this.updateScreenViewOnTab)
                         this.updateChildrenStyling(newDirection, false)
                     }
 
@@ -476,7 +547,8 @@
                     pageTop = document.querySelector("div.page-viewport.top")
                     pageContainer = pageTop.querySelector("div.page-container")
                     pageScroll = pageContainer.querySelector(".page-scroll")
-                    let pageWidth = parseFloat(pageScroll.style.width)
+                    const pageWidth = parseFloat(pageScroll.style.width)
+                    updateCanvasProportions()
 
                     // GOING THROUGH EVERY DRAGGABLE CAROUSEL OBJECT THAT ARE ON CURRENT PAGE
                     let draggableCarousels = onDrags.filter(dra => pageContainer.contains( document.getElementById(dra.id) )===true)
@@ -507,6 +579,16 @@
                             let startingCoordinate = parseFloat( draggableCarousel.style.getPropertyValue(set.coordinates[coordinateName]) )
                             startingCoordinate = isNaN(startingCoordinate)===false ? Math.abs( Math.min(startingCoordinate, 0) ) : 0
                             startingCoordinates.push(startingCoordinate)
+                        }
+
+                        // GRANTING ACCESSIBLITY FEATURE
+                        if(cerosContext.featureFlags.Accessibility===true){
+                            let objectsArray = draggableCarousels[i].findAllComponents().layers
+                            let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
+                            let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
+
+                            for(let hotspotObject of hotspotsObjects)
+                                hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray))
                         }
 
                         // DEFINING CAROUSEL HORIZONTAL MARGINS
@@ -609,7 +691,7 @@
 
                         // HAMMER.JS
                         const hammerObject = new Hammer(draggableCarousel)
-                        hammerObject.get('press').set({ time: 251 })
+                        hammerObject.get('press').set({ time: 101 })
                         settings.isFreeMovementActive = settings.directionAxis==='both' || settings.directionAxis==='all'
                         const dir = settings.isFreeMovementActive===true ? 'all' : settings.directionAxis
                         hammerObject.get('pan').set({ direction: Hammer[`DIRECTION_${dir.toUpperCase()}`], threshold: 1 })
