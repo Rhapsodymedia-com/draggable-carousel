@@ -137,7 +137,10 @@
                         firstParent = secondParent
                         tries++
                     }
-                    return (parseFloat( window.getComputedStyle(elem).getPropertyValue(prop) ) + coordinate)
+                    let distance = parseFloat( window.getComputedStyle(elem).getPropertyValue(prop) )
+                    if(isNaN(distance)===true)
+                        distance = 0
+                    return (distance + coordinate)
                 }
 
                 // CREATING CARUSELS BLUEPRINT
