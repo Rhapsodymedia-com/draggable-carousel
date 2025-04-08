@@ -548,6 +548,7 @@
                     pageContainer = pageTop.querySelector("div.page-container")
                     pageScroll = pageContainer.querySelector(".page-scroll")
                     const pageWidth = parseFloat(pageScroll.style.width)
+                    console.log('works')
                     updateCanvasProportions()
 
                     // GOING THROUGH EVERY DRAGGABLE CAROUSEL OBJECT THAT ARE ON CURRENT PAGE
@@ -562,6 +563,7 @@
                         let allTags = draggableCarousels[i].tags
 
                         // FINDING "EMPTY-SHAPE"
+                        console.log('works1')
                         let draggableCarouselChildren = draggableCarousels[i].items
                         let emptyShape = draggableCarouselChildren.find(lay => lay.tags.includes('empty-shape'))
                         if(emptyShape==undefined){
@@ -582,6 +584,8 @@
                         }
 
                         // GRANTING ACCESSIBLITY FEATURE
+                        console.log('works2')
+                        console.log(cerosContext.featureFlags)
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
