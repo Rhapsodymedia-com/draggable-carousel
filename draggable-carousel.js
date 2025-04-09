@@ -276,7 +276,7 @@
                                 for(let q=0; q<progressRanges.length; q++){
                                     progressRanges[q] = this.mainElement.style.transform.split('(')[1].split('px,')[q]
                                     progressRanges[q] = parseFloat(progressRanges[q]) / this.setup.range[Object.keys(this.setup.range)[q]]
-                                    progressRanges[q] = isNaN(progressRanges[q])===true ? 1 : progressRanges[q]
+                                    progressRanges[q] = isNaN(progressRanges[q])===true ? 0 : progressRanges[q]
                                     if(availableRanges[q]==0 || (this.setup.directionAxis!=set.directions[q] && this.setup.isFreeMovementActive===false))
                                         availableRanges.shift()
                                 }
