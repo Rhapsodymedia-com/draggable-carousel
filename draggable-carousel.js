@@ -427,12 +427,14 @@
                                             if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
                                                 // let boundingClientRect = Math.round( hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions )
                                                 let boundingClientRect = getDistance(hotspotElement, set.coordinates[k])
-                                                let previousValue = this.setup.dragMovement.oldValue[set.axises[k]]
-                                                previousValue -= boundingClientRect
-                                                previousValue = Math.min(previousValue, 0)
-                                                console.log(Math.round(hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions), boundingClientRect, previousValue)
-                                                let newViewport = -this.setup.viewport[set.dimensions[k]]
-                                                this.setup.dragMovement.currentValue[set.axises[k]] = newViewport<previousValue ? previousValue : newViewport
+                                                this.setup.dragMovement.currentValue[set.axises[k]] = Math.max(-boundingClientRect, this.setup.range[set.dimensions[k]])
+
+                                                console.log(Math.round(hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions), boundingClientRect, this.setup.dragMovement.currentValue[set.axises[k]])
+                                                // let previousValue = this.setup.dragMovement.oldValue[set.axises[k]]
+                                                // previousValue -= boundingClientRect
+                                                // previousValue = Math.min(previousValue, 0)
+                                                // let newViewport = -this.setup.viewport[set.dimensions[k]]
+                                                // this.setup.dragMovement.currentValue[set.axises[k]] = newViewport<previousValue ? previousValue : newViewport
                                             }
                                         }
                                         this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
