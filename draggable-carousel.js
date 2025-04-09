@@ -418,6 +418,7 @@
                     updateScreenViewOnTab = keyEvent => {
                         if(keyEvent.code==='Tab'){
                             updateCanvasProportions()
+                            pageScroll.style.position = 'static'
                             requestAnimationFrame(() => {
                                 let hotspotsElements = Array.from(this.mainElement.querySelectorAll('.hotspot'))
                                 for(let hotspotElement of hotspotsElements){
@@ -441,6 +442,7 @@
                                         this.refreshOldValue()
                                     }
                                 }
+                                pageScroll.style.position = 'absolute'
                             })
                         }
                     }
