@@ -82,7 +82,6 @@
                     const displays = elementsArr.map(dis => dis.style.display)
 
                     // WAITING TO FIND NEWLY OPENING POP-UP
-                    console.log('triggered')
                     setTimeout(() => {
                         if(clickedHotspot.focusOn==='empty')
                             return
@@ -96,7 +95,7 @@
                                     let outsidePopUpHotspots = hotspotsArray.filter(out => insidePopUpHotspots.includes(out)===false)
 
                                     // DISABLING HOTSPOTS IN A CAROUSEL WHICH ARE OUTSIDE CURRENT VISIBLE POP-UP
-                                    const toggleOtherHotspots = (tabNumber=-1) => {console.log(hotspotsArray,insidePopUpHotspots,outsidePopUpHotspots); outsidePopUpHotspots.forEach(outside => outside.tabIndex=tabNumber)}
+                                    const toggleOtherHotspots = (tabNumber=-1) => outsidePopUpHotspots.forEach(outside => outside.tabIndex=tabNumber)
                                     toggleOtherHotspots()
                                     clickedHotspot.addEventListener('click', clickEvent => toggleOtherHotspots())
 
@@ -128,7 +127,7 @@
                     let firstParent = elem.parentElement
                     let coordinate = 0
                     let tries = 0
-                    while(firstParent.classList.contains('page-scroll')===false || tries>=50){
+                    while(firstParent!=pageScroll || tries>=50){
                         let secondParent = firstParent.parentElement
                         coordinate += parseFloat( window.getComputedStyle(firstParent).getPropertyValue(prop) )
                         firstParent = secondParent
@@ -276,7 +275,7 @@
                                 for(let q=0; q<progressRanges.length; q++){
                                     progressRanges[q] = this.mainElement.style.transform.split('(')[1].split('px,')[q]
                                     progressRanges[q] = parseFloat(progressRanges[q]) / this.setup.range[Object.keys(this.setup.range)[q]]
-                                    progressRanges[q] = isNaN(progressRanges[q])===true ? 0 : progressRanges[q]
+                                    progressRanges[q] = isNaN(progressRanges[q])===true ? 1 : progressRanges[q]
                                 }
 
                                 let progressRange = 1
@@ -623,6 +622,7 @@
                                 viewHeight = mask[1]
                                 parentElem.style.width = `${mask[0]}px`
                                 parentElem.style.height = `${mask[1]}px`
+                                parentElem.style.position = 'absolute'
                                 parentElem.style.overflow = 'hidden'
                             }
                         }
