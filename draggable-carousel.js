@@ -425,7 +425,9 @@
                                         for(let k=0; k<set.axises.length; k++){
                                             let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
                                             if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
-                                                let boundingClientRect = Math.round( hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions )
+                                                // let boundingClientRect = Math.round( hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions )
+                                                let boundingClientRect = getDistance(hotspotElement, set.coordinates[k])
+                                                console.log(Math.round( hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions ), boundingClientRect)
                                                 let previousValue = this.setup.dragMovement.oldValue[set.axises[k]]
                                                 previousValue -= boundingClientRect
                                                 let newViewport = -this.setup.viewport[set.dimensions[k]]
