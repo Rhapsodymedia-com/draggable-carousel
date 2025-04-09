@@ -271,16 +271,19 @@
                                 effectName = removeDashes(effectName)
 
                                 // DEFINING PROGRESS OF DRAGGING THROUGH A CAROUSEL
-                                let progressRanges = new Array( Object.keys(this.setup.range).length )
+                                let availableRanges = Object.values(this.setup.range)
+                                let progressRanges = new Array(availableRanges.length)
                                 for(let q=0; q<progressRanges.length; q++){
                                     progressRanges[q] = this.mainElement.style.transform.split('(')[1].split('px,')[q]
                                     progressRanges[q] = parseFloat(progressRanges[q]) / this.setup.range[Object.keys(this.setup.range)[q]]
                                     progressRanges[q] = isNaN(progressRanges[q])===true ? 1 : progressRanges[q]
+                                    if(availableRanges[q]==0 || (this.setup.directionAxis!=set.directions[q] && this.setup.isFreeMovementActive===false))
+                                        availableRanges.shift()
                                 }
 
                                 let progressRange = 1
                                 if(effectParameters.isProgressive===true){
-                                    progressRange = progressRanges.reduce(sum) / progressRanges.filter(progres => progres!=0).length
+                                    progressRange = progressRanges.reduce(sum) / availableRanges.length
                                     progressRange = isNaN(progressRange)===true ? 0 : progressRange
                                     direction = 1
                                 }
