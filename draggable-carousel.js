@@ -619,14 +619,19 @@
                             let mask = parentObject.payload.split(',')
                             if(mask.length<2)
                                 mask = [emptyShape.width, emptyShape.height]
+                            if(mask.length<4)
+                                mask.push(0,0)
 
                             // SETTING VISIBLE AREA FOR CAROUSEL GROUP IN WHICH IT WILL MOVE
                             if(parentElem.classList.contains('page-scroll')===false){
                                 viewHeight = mask[1]
                                 parentElem.style.width = `${mask[0]}px`
                                 parentElem.style.height = `${mask[1]}px`
+                                parentElem.style.left = `${mask[2]}px`
+                                parentElem.style.top = `${mask[3]}px`
                                 parentElem.style.position = 'absolute'
                                 parentElem.style.overflow = 'hidden'
+                                parentElem.classList.add('carousel-parent')
                             }
                         }
                         
