@@ -426,16 +426,8 @@
                                         for(let k=0; k<set.axises.length; k++){
                                             let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
                                             if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
-                                                // let boundingClientRect = Math.round( hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions )
-                                                let boundingClientRect = getDistance(hotspotElement, set.coordinates[k])
-                                                this.setup.dragMovement.currentValue[set.axises[k]] = Math.max(-boundingClientRect, this.setup.range[set.dimensions[k]])
-    
-                                                console.log(Math.round(hotspotElement.getBoundingClientRect()[set.axises[k]]/proportions), boundingClientRect, this.setup.dragMovement.currentValue[set.axises[k]])
-                                                // let previousValue = this.setup.dragMovement.oldValue[set.axises[k]]
-                                                // previousValue -= boundingClientRect
-                                                // previousValue = Math.min(previousValue, 0)
-                                                // let newViewport = -this.setup.viewport[set.dimensions[k]]
-                                                // this.setup.dragMovement.currentValue[set.axises[k]] = newViewport<previousValue ? previousValue : newViewport
+                                                let newVal = getDistance(hotspotElement, set.coordinates[k])
+                                                this.setup.dragMovement.currentValue[set.axises[k]] = Math.max(-newVal, this.setup.range[set.dimensions[k]])
                                             }
                                         }
                                         this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
