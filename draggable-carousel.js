@@ -483,7 +483,7 @@
                                 let snapValue = this.setup.snapPositions[m].reduce((first, second) => selectTheClosestNumber(first, second, curr))
                                 let lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
                                 snapValues[m] = this.setup.dragMovement.currentValue[set.axises[m]] + (snapValue - this.setup.dragMovement.currentValue[set.axises[m]]) * lerpValue
-                                this.setup.dragMovement.currentValue[set.axises[m]] = snapValues[m]
+                                this.setup.dragMovement.currentValue[set.axises[m]] = Math.min(snapValues[m], -this.setup.range[set.dimensions[m]])
                             }
                         }
                         this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
