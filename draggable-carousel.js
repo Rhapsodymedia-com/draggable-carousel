@@ -550,6 +550,7 @@
                     }
                 }
 
+                console.log('work0')
                 const pageChangedCallback = pag => {
                     console.log('work')
                     pageTop = mainDocument.querySelector("div.page-viewport.top")
