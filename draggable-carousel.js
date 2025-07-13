@@ -8,7 +8,7 @@
     require(['CerosSDK'], function (CerosSDK) {
         CerosSDK.findExperience()
             .fail(function (error) {
-                console.error(error);
+                console.error(error)
             })
             .done(function (experience) {
                 const draggingPlugin = document.getElementById("ceros-draggable-carousel-plugin")
@@ -557,6 +557,7 @@
 
                     // GOING THROUGH EVERY DRAGGABLE CAROUSEL OBJECT THAT ARE ON CURRENT PAGE
                     let draggableCarousels = onDrags.filter(dra => pageContainer.contains( document.getElementById(dra.id) )===true)
+                    console.log(draggableCarousels)
                     if(draggableCarousels.some(caro => caro.isDraggable!=undefined)===true)
                         return
                     for(let i=0; i<draggableCarousels.length; i++){
@@ -573,6 +574,7 @@
                             console.warn(`"empty-shape" component is missing for Draggable Carousel with id "${draggableCarousel.id}"`)
                             continue
                         }
+                        console.log(emptyShape)
                         
                         // DEFINING CAROUSEL AREA
                         for(let dimensionName of set.dimensions)
@@ -585,6 +587,7 @@
                             startingCoordinate = isNaN(startingCoordinate)===false ? Math.abs( Math.min(startingCoordinate, 0) ) : 0
                             startingCoordinates.push(startingCoordinate)
                         }
+                        console.log(startingCoordinates)
 
                         // GRANTING ACCESSIBLITY FEATURE
                         if(cerosContext.featureFlags.Accessibility===true){
@@ -603,6 +606,7 @@
                             margin = Math.max(Math.round(margin), 0)
                             extraSpace += margin
                         }
+                        console.log(extraSpace)
 
                         // GETTING MASK VALUES FROM PARENT ELEMENT
                         let viewHeight = cerosContext.docVersion.viewportHeight
@@ -633,6 +637,7 @@
                                 parentElem.classList.add('carousel-parent')
                             }
                         }
+                        console.log('works')
                         
                         // TURNING OFF "DRAGGABLE" ON IMG ELEMENTS
                         let images = Array.from( draggableCarousel.querySelectorAll('img') )
@@ -643,6 +648,7 @@
                         let payloadValues = draggableCarousels[i].payload.split(',')
                         let localEffectsIntensity = payloadValues!='' ? payloadValues[0] : globalProperties.effectsIntensity
                         let localEffectsDuration = payloadValues[1] ?? globalProperties.effectsDuration
+                        console.log(payloadValues)
 
                         // SETTING PROPERTIES FROM TAGS
                         const createEffectObject = ef => {
