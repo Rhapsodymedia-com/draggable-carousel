@@ -34,6 +34,7 @@
                 let isMobile = ua.includes('mobile')===true
                 if(cerosContext.previewMode===true && mainDocument.parentElement.classList.contains('-desktop')!=true)
                     isMobile = true
+                console.log(isMobile)
                 
                 // REMOVE DASHES AND REPLACE THEM WITH UPPERCASE LETTERS
                 const removeDashes = title => {
@@ -118,8 +119,10 @@
                     }, 50)
                 }
                 const updateCanvasProportions = () => {
-                    const proportion = pageTop.style.zoom!='' ? pageTop.style.zoom : pageTop.style.transform.split('(')[1].split(',')[0]
-                    proportions = parseFloat(proportion)
+                    let isZoom = pageTop.style.zoom!=undefined && pageTop.style.zoom!=''
+                    const proportion = isZoom===true ? pageTop.style.zoom : pageTop.style.transform.split('(')[1].split(')')[0].split(',')[0]
+                    proportions = parseFloat(proportion) || 1
+                    console.log(proportions)
                 }
                 const sum = (accumulator, currentVal) => accumulator + currentVal
                 const selectTheClosestNumber = (one, two, cur) => (Math.abs(two-cur) < Math.abs(one-cur)) ? two : one
@@ -552,10 +555,12 @@
                     pageTop = document.querySelector("div.page-viewport.top")
                     pageContainer = pageTop.querySelector("div.page-container")
                     pageScroll = pageContainer.querySelector(".page-scroll")
+                    console.log('work')
                     const pageWidth = parseFloat(pageScroll.style.width)
                     updateCanvasProportions()
 
                     // GOING THROUGH EVERY DRAGGABLE CAROUSEL OBJECT THAT ARE ON CURRENT PAGE
+                    console.log(onDrags)
                     let draggableCarousels = onDrags.filter(dra => pageContainer.contains( document.getElementById(dra.id) )===true)
                     console.log(draggableCarousels)
                     if(draggableCarousels.some(caro => caro.isDraggable!=undefined)===true)
