@@ -12,7 +12,7 @@
             })
             .done(function (experience) {
                 const draggingPlugin = document.getElementById("ceros-draggable-carousel-plugin")
-                let mainDocument = document.getElementById('main')
+                const mainDocument = document.getElementById('main')
                 let pageTop = mainDocument.querySelector("div.page-viewport.top")
                 let pageContainer = pageTop.querySelector("div.page-container")
                 let pageScroll = pageContainer.querySelector(".page-scroll")
@@ -34,7 +34,6 @@
                 let isMobile = ua.includes('mobile')===true
                 if(cerosContext.previewMode===true && mainDocument.parentElement.classList.contains('-desktop')!=true)
                     isMobile = true
-                console.log(isMobile)
                 
                 // REMOVE DASHES AND REPLACE THEM WITH UPPERCASE LETTERS
                 const removeDashes = title => {
@@ -552,10 +551,11 @@
                 }
 
                 const pageChangedCallback = pag => {
-                    pageTop = document.querySelector("div.page-viewport.top")
-                    pageContainer = pageTop.querySelector("div.page-container")
-                    pageScroll = pageContainer.querySelector(".page-scroll")
                     console.log('work')
+                    pageTop = mainDocument.querySelector("div.page-viewport.top")
+                    console.log(pageTop)
+                    pageContainer = pageTop.querySelector("div.page-container")
+                    pageScroll = pageContainer.querySelector("div.page-scroll")
                     const pageWidth = parseFloat(pageScroll.style.width)
                     updateCanvasProportions()
 
