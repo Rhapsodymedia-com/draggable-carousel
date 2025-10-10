@@ -583,10 +583,10 @@
                         let startingCoordinates = []
                         for(let coordinateName of set.coordinates){
                             let startingCoordinate = parseFloat( draggableCarousel.style.getPropertyValue(set.coordinates[coordinateName]) )
+                            console.log(startingCoordinate)
                             startingCoordinate = isNaN(startingCoordinate)===false ? Math.abs( Math.min(startingCoordinate, 0) ) : 0
                             startingCoordinates.push(startingCoordinate)
                         }
-                        console.log(startingCoordinates)
 
                         // GRANTING ACCESSIBLITY FEATURE
                         if(cerosContext.featureFlags.Accessibility===true){
