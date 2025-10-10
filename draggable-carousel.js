@@ -586,6 +586,7 @@
                             startingCoordinate = isNaN(startingCoordinate)===false ? Math.abs( Math.min(startingCoordinate, 0) ) : 0
                             startingCoordinates.push(startingCoordinate)
                         }
+                        console.log(startingCoordinates)
 
                         // GRANTING ACCESSIBLITY FEATURE
                         if(cerosContext.featureFlags.Accessibility===true){
