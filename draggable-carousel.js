@@ -192,14 +192,14 @@
                         }
                     }
 
-                    showTarget(triggerDat, currentP){
+                    showTarget(triggerDat, currentP, startingPoi){
                         for(let num=0; num<triggerDat.interactivePositions.length; num++){
-                            if(currentP>triggerDat.interactivePositions[num] && triggerDat.interactiveHotspots[num].called!=true){
+                            if(currentP+startingPoi>triggerDat.interactivePositions[num]-startingPoi && triggerDat.interactiveHotspots[num].called!=true){
                                 triggerDat.interactiveHotspots[num].called = true
                                 triggerDat.interactiveHotspots[num].click()
                                 break
                             }
-                            else if(currentP<triggerDat.interactivePositions[num] && triggerDat.interactiveHotspots[num].called===true){
+                            else if(currentP+startingPoi<triggerDat.interactivePositions[num]-startingPoi && triggerDat.interactiveHotspots[num].called===true){
                                 triggerDat.interactiveHotspots[num].called = false
                                 triggerDat.interactiveHotspots[num-1].click()
                                 break
@@ -376,7 +376,7 @@
                                 if(currentData.interactiveHotspots.length===2)
                                     this.cycle(currentData, currentPosition)
                                 if(currentData.interactiveHotspots.length==currentData.interactivePositions.length)
-                                    this.showTarget(currentData, currentPosition)
+                                    this.showTarget(currentData, currentPosition, this.setup.startingPoint[axisName])
                             }
                         }
                     }
