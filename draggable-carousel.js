@@ -356,6 +356,8 @@
                             triggerHotspots = triggerHotspots.flat()
                             for(let currentAxis of set.axises){
                                 let triggerPoints = carouselLayers.filter(trigg => trigg.tags.includes('trigger-point'))
+                                console.log(triggerPoints, currentAxis, this.setup.startingPoint)
+                                console.log(this.setup.startingPoint[currentAxis])
                                 triggerPoints.unshift(this.setup.startingPoint[currentAxis])
                                 this.setup.triggerDatas[currentAxis] = {
                                     interactivePositions: triggerPoints.map(trig => trig[currentAxis]),
@@ -583,7 +585,6 @@
                         let startingCoordinates = []
                         for(let coordinateName of set.coordinates){
                             let startingCoordinate = parseFloat( draggableCarousel.style.getPropertyValue(coordinateName) )
-                            console.log(draggableCarousel,set, coordinateName, startingCoordinate)
                             startingCoordinate = isNaN(startingCoordinate)===false ? Math.abs( Math.min(startingCoordinate, 0) ) : 0
                             startingCoordinates.push(startingCoordinate)
                         }
