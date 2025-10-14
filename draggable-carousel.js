@@ -360,7 +360,7 @@
                                 console.log(this.setup.startingPoint[currentAxis])
                                 triggerPoints.unshift(this.setup.startingPoint[currentAxis])
                                 this.setup.triggerDatas[currentAxis] = {
-                                    interactivePositions: triggerPoints.map(trig => trig[currentAxis]),
+                                    interactivePositions: triggerPoints.map(trig => trig[currentAxis] ?? trig),
                                     interactiveHotspots: triggerHotspots.filter(triggerHot => triggerHot.orientation==currentAxis),
                                     lastTriggeredHotspot: null
                                 }
