@@ -234,19 +234,12 @@
                                 // DEFINING SNAPPING FUNCTIONALITY
                                 if(string.includes('snap-area')===true && this.setup.snapPositions==undefined){
                                     for(let s=0; s<set.coordinates.length; s++){
-                                        // const viewSpace = Object.values(this.setup.viewport)[s]
                                         const viewSpace = this.setup.viewport[set.dimensions[s]]
                                         const startPoint = parseFloat(element.style.getPropertyValue(set.coordinates[s]))
                                         const centerPoint = parseFloat(element.style.getPropertyValue(set.dimensions[s]))/2
                                         let snapPoint = viewSpace/2 - (startPoint + centerPoint) + this.setup.startingPoint[set.axises[s]]
-                                        // let coord = parseFloat(this.mainElement.style.getPropertyValue(set.coordinates[s]))
-                                        console.log(viewSpace/2, startPoint , centerPoint , this.setup.startingPoint[set.axises[s]])
-                                        console.log(snapPoint, this.setup.range[set.dimensions[s]])
                                         snapPoint = Math.min(snapPoint, this.setup.startingPoint[set.axises[s]])
                                         snapPoint = Math.max(snapPoint, this.setup.range[set.dimensions[s]] + this.setup.startingPoint[set.axises[s]])
-                                        // snapPoint = Math.min(snapPoint, -coord)
-                                        // snapPoint = Math.max(minSnap * Math.sign(snapPoint), -maxSnap)
-                                        // snapPoint = Math.max(snapPoint, this.setup.range[set.dimensions[s]])
                                         snapPoints[s].push(snapPoint)
                                     }
                                 }
@@ -494,12 +487,11 @@
                         interpolation += this.deltaTime
                         for(let m=0; m<set.axises.length; m++){
                             if(this.setup.snapPositions[m].length>0){
-                                let curr = this.setup.dragMovement.currentValue[set.axises[m]]
-                                let snapValue = this.setup.snapPositions[m].reduce((first, second) => selectTheClosestNumber(first, second, curr))
-                                console.log(curr, this.setup.dragMovement.currentValue[set.axises[m]], this.setup.startingPoint[set.axises[m]], snapValue)
-                                let lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
-                                snapValues[m] = this.setup.dragMovement.currentValue[set.axises[m]] + (snapValue - this.setup.dragMovement.currentValue[set.axises[m]]) * lerpValue
-                                console.log(snapValues[m])
+                                const curr = this.setup.dragMovement.currentValue[set.axises[m]]
+                                const snapValue = this.setup.snapPositions[m].reduce((first, second) => selectTheClosestNumber(first, second, curr))
+                                const lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
+                                snapValues[m] = curr + (snapValue-curr) * lerpValue
+                                console.log(curr, snapValue, snapValues[m])
                                 this.setup.dragMovement.currentValue[set.axises[m]] = snapValues[m]
                             }
                         }
