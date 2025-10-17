@@ -238,7 +238,7 @@
                                         const viewSpace = this.setup.viewport[set.dimensions[s]]
                                         const startPoint = parseFloat(element.style.getPropertyValue(set.coordinates[s]))
                                         const centerPoint = parseFloat(element.style.getPropertyValue(set.dimensions[s]))/2
-                                        let snapPoint = viewSpace/2 - (startPoint + centerPoint) - this.setup.startingPoint[set.coordinates[s]]
+                                        let snapPoint = viewSpace/2 - (startPoint + centerPoint) - this.setup.startingPoint[set.axises[s]]
                                         let coord = parseFloat(this.mainElement.style.getPropertyValue(set.coordinates[s]))
                                         snapPoint = Math.min(snapPoint, coord)
                                         snapPoint = Math.max(snapPoint, Math.abs(this.setup.range[set.dimensions[s]]))
