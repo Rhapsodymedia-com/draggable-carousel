@@ -359,8 +359,6 @@
                             triggerHotspots = triggerHotspots.flat()
                             for(let currentAxis of set.axises){
                                 let triggerPoints = carouselLayers.filter(trigg => trigg.tags.includes('trigger-point'))
-                                console.log(triggerPoints, currentAxis, this.setup.startingPoint)
-                                console.log(this.setup.startingPoint[currentAxis])
                                 triggerPoints.unshift(this.setup.startingPoint[currentAxis])
                                 this.setup.triggerDatas[currentAxis] = {
                                     interactivePositions: triggerPoints.map(trig => trig[currentAxis] ?? trig),
@@ -378,11 +376,11 @@
                                 const currentPosition = this.setup.dragMovement.currentValue[axisName] * -1
                                 const currentPoint = this.setup.startingPoint[axisName]
                                 if(currentData.interactiveHotspots.length===2){
-                                    console.log('cycle active for: ', this.idNumber)
+                                    console.log('cycle active for: ', this.setup.idNumber)
                                     this.triggerInteractions(currentData, currentPosition, currentPoint, true)
                                 }
                                 if(currentData.interactiveHotspots.length==currentData.interactivePositions.length){
-                                    console.log('showTarget active for: ', this.idNumber)
+                                    console.log('showTarget active for: ', this.setup.idNumber)
                                     this.triggerInteractions(currentData, currentPosition, currentPoint, false)
                                 }
                             }
@@ -496,7 +494,7 @@
                                 let lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
                                 snapValues[m] = curr + (snapValue - curr) * lerpValue
                                 console.log(snapValues[m])
-                                this.setup.dragMovement.currentValue[set.axises[m]] = Math.min(snapValues[m], -this.setup.range[set.dimensions[m]])
+                                this.setup.dragMovement.currentValue[set.axises[m]] = Math.min(snapValues[m], this.setup.range[set.dimensions[m]] * Math.sign(-snapValues[m]))
                             }
                         }
                         this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
