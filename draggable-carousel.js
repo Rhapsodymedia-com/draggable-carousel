@@ -175,33 +175,36 @@
                         }
                     }
 
-                    cycle(triggerData, currentPos){
-                        for(let number=0; number<triggerData.interactivePositions.length; number++){
-                            let orderNumber = triggerData.lastTriggeredHotspot!=undefined ? triggerData.interactivePositions.indexOf(triggerData.lastTriggeredHotspot)+1 : number
-                            if(currentPos>triggerData.interactivePositions[orderNumber]){
-                                triggerData.lastTriggeredHotspot = triggerData.interactivePositions[orderNumber]
-                                triggerData.interactiveHotspots[1].click()
+                    triggerInteractions(currentDat, currentPos, currentPoi, isCycleType=false){
+                        for(let number=0; number<currentDat.interactivePositions.length; number++){
+                            const currentP = currentPos+currentPoi
+                            const num = (isCycleType===true && currentDat.lastTriggeredHotspot!=undefined) ? currentDat.interactivePositions.indexOf(currentDat.lastTriggeredHotspot)+1 : number
+                            const interactivePosition = currentDat.interactivePositions[num]-currentPoi
+                            if(currentP > interactivePosition){
+                                // CASE FOR CYCLE INTERACTION
+                                if(isCycleType===true){
+                                    currentDat.lastTriggeredHotspot = currentDat.interactivePositions[num]
+                                    currentDat.interactiveHotspots[1].click()
+                                    break
+                                }
+                                // CASE FOR SHOW TARGET INTERACTION
+                                if(currentDat.interactiveHotspots[num].called!=true){
+                                    currentDat.interactiveHotspots[num].called = true
+                                    currentDat.interactiveHotspots[num].click()
+                                    break
+                                }
+                            }
+                            // ALTERNATIVE CASE FOR CYCLE INTERACTION
+                            else if(currentP < currentDat.lastTriggeredHotspot){
+                                const orderNumer = this.setup.triggerPositions.indexOf(currentDat.lastTriggeredHotspot)-1
+                                currentDat.lastTriggeredHotspot = orderNumer>=0 ? currentDat.interactivePositions[orderNumer] : null
+                                currentDat.interactiveHotspots[0].click()
                                 break
                             }
-                            else if(triggerData.lastTriggeredHotspot[ax]!=undefined && currentPos<triggerData.lastTriggeredHotspot){
-                                let orderNum = this.setup.triggerPositions.indexOf(triggerData.lastTriggeredHotspot)-1
-                                triggerData.lastTriggeredHotspot = orderNum>=0 ? triggerData.interactivePositions[orderNum] : null
-                                triggerData.interactiveHotspots[0].click()
-                                break
-                            }
-                        }
-                    }
-
-                    showTarget(triggerDat, currentP, startingPoi){
-                        for(let num=0; num<triggerDat.interactivePositions.length; num++){
-                            if(currentP+startingPoi>triggerDat.interactivePositions[num]-startingPoi && triggerDat.interactiveHotspots[num].called!=true){
-                                triggerDat.interactiveHotspots[num].called = true
-                                triggerDat.interactiveHotspots[num].click()
-                                break
-                            }
-                            else if(currentP+startingPoi<triggerDat.interactivePositions[num]-startingPoi && triggerDat.interactiveHotspots[num].called===true){
-                                triggerDat.interactiveHotspots[num].called = false
-                                triggerDat.interactiveHotspots[num-1].click()
+                            // ALTERNATIVE CASE FOR SHOW TARGET INTERACTION
+                            else if(currentP < interactivePosition && currentDat.interactiveHotspots[num].called===true){
+                                currentDat.interactiveHotspots[num].called = false
+                                currentDat.interactiveHotspots[num-1].click()
                                 break
                             }
                         }
@@ -373,10 +376,11 @@
                                     continue
                                 const currentData = this.setup.triggerDatas[axisName]
                                 const currentPosition = this.setup.dragMovement.currentValue[axisName] * -1
+                                const currentPoint = this.setup.startingPoint[axisName]
                                 if(currentData.interactiveHotspots.length===2)
-                                    this.cycle(currentData, currentPosition)
+                                    this.triggerInteractions(currentData, currentPosition, currentPoint, true)
                                 if(currentData.interactiveHotspots.length==currentData.interactivePositions.length)
-                                    this.showTarget(currentData, currentPosition, this.setup.startingPoint[axisName])
+                                    this.triggerInteractions(currentData, currentPosition, currentPoint, false)
                             }
                         }
                     }
@@ -446,7 +450,8 @@
                         let lastValue = 0
                         let newDirection = 1
 
-                        this.hammerObj.on('press panmove', event => {
+                        this.hammerObj.on('press panmove swipe', event => {
+                            console.log('start: ', event)
                             newDirection = 0
                             if(lastValue > event.deltaX)
                                 newDirection = 1
@@ -482,10 +487,10 @@
                         interpolation += this.deltaTime
                         for(let m=0; m<set.axises.length; m++){
                             if(this.setup.snapPositions[m].length>0){
-                                let curr = this.setup.dragMovement.currentValue[set.axises[m]]
+                                let curr = this.setup.dragMovement.currentValue[set.axises[m]] + this.setup.startingPoint[set.axises[m]]
                                 let snapValue = this.setup.snapPositions[m].reduce((first, second) => selectTheClosestNumber(first, second, curr))
                                 let lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
-                                snapValues[m] = this.setup.dragMovement.currentValue[set.axises[m]] + (snapValue - this.setup.dragMovement.currentValue[set.axises[m]]) * lerpValue
+                                snapValues[m] = curr + (snapValue - curr) * lerpValue
                                 this.setup.dragMovement.currentValue[set.axises[m]] = Math.min(snapValues[m], -this.setup.range[set.dimensions[m]])
                             }
                         }
@@ -538,6 +543,7 @@
                         }
 
                         this.hammerObj.on('pressup panend pancancel', eve => {
+                            console.log('end: ', eve)
                             this.refreshOldValue()
 
                             this.isSliding = this.setup.slideIndicator!=0
@@ -711,7 +717,7 @@
                         hammerObject.get('pan').set({ direction: Hammer[`DIRECTION_${dir.toUpperCase()}`], threshold: 1 })
                         hammerObject.get('pinch').set({ enable: false })
                         hammerObject.get('rotate').set({ enable: false })
-                        hammerObject.get('swipe').set({ enable: false })
+                        hammerObject.get('swipe').set({ enable: true })
                         hammerObject.get('tap').set({ enable: false })
                         hammerObject.get('doubletap').set({ enable: false })
 
