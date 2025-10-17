@@ -196,7 +196,7 @@
                             }
                             // ALTERNATIVE CASE FOR CYCLE INTERACTION
                             else if(currentP < currentDat.lastTriggeredHotspot){
-                                const orderNumer = this.setup.triggerPositions.indexOf(currentDat.lastTriggeredHotspot)-1
+                                const orderNumer = currentDat.interactivePositions.indexOf(currentDat.lastTriggeredHotspot)-1
                                 currentDat.lastTriggeredHotspot = orderNumer>=0 ? currentDat.interactivePositions[orderNumer] : null
                                 currentDat.interactiveHotspots[0].click()
                                 break
@@ -377,10 +377,14 @@
                                 const currentData = this.setup.triggerDatas[axisName]
                                 const currentPosition = this.setup.dragMovement.currentValue[axisName] * -1
                                 const currentPoint = this.setup.startingPoint[axisName]
-                                if(currentData.interactiveHotspots.length===2)
+                                if(currentData.interactiveHotspots.length===2){
+                                    console.log('cycle active for: ', this.idNumber)
                                     this.triggerInteractions(currentData, currentPosition, currentPoint, true)
-                                if(currentData.interactiveHotspots.length==currentData.interactivePositions.length)
+                                }
+                                if(currentData.interactiveHotspots.length==currentData.interactivePositions.length){
+                                    console.log('showTarget active for: ', this.idNumber)
                                     this.triggerInteractions(currentData, currentPosition, currentPoint, false)
+                                }
                             }
                         }
                     }
@@ -451,7 +455,6 @@
                         let newDirection = 1
 
                         this.hammerObj.on('press panmove swipe', event => {
-                            console.log('start: ', event)
                             newDirection = 0
                             if(lastValue > event.deltaX)
                                 newDirection = 1
@@ -489,8 +492,10 @@
                             if(this.setup.snapPositions[m].length>0){
                                 let curr = this.setup.dragMovement.currentValue[set.axises[m]] + this.setup.startingPoint[set.axises[m]]
                                 let snapValue = this.setup.snapPositions[m].reduce((first, second) => selectTheClosestNumber(first, second, curr))
+                                console.log(curr, this.setup.dragMovement.currentValue[set.axises[m]], this.setup.startingPoint[set.axises[m]], snapValue)
                                 let lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
                                 snapValues[m] = curr + (snapValue - curr) * lerpValue
+                                console.log(snapValues[m])
                                 this.setup.dragMovement.currentValue[set.axises[m]] = Math.min(snapValues[m], -this.setup.range[set.dimensions[m]])
                             }
                         }
@@ -543,7 +548,6 @@
                         }
 
                         this.hammerObj.on('pressup panend pancancel', eve => {
-                            console.log('end: ', eve)
                             this.refreshOldValue()
 
                             this.isSliding = this.setup.slideIndicator!=0
