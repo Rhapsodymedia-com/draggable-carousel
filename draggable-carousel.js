@@ -242,8 +242,8 @@
                                         let coord = parseFloat(this.mainElement.style.getPropertyValue(set.coordinates[s]))
                                         console.log(viewSpace/2, startPoint , centerPoint , this.setup.startingPoint[set.axises[s]])
                                         console.log(snapPoint, this.setup.range[set.dimensions[s]], coord)
-                                        // snapPoint = Math.min(snapPoint, Math.abs(this.setup.range[set.dimensions[s]]))
-                                        // snapPoint = Math.max(snapPoint, coord)
+                                        snapPoint = Math.min(snapPoint, -coord)
+                                        snapPoint = Math.max(snapPoint, this.setup.range[set.dimensions[s]])
                                         snapPoints[s].push(snapPoint)
                                     }
                                 }
