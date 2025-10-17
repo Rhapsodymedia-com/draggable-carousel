@@ -234,13 +234,14 @@
                                 // DEFINING SNAPPING FUNCTIONALITY
                                 if(string.includes('snap-area')===true && this.setup.snapPositions==undefined){
                                     for(let s=0; s<set.coordinates.length; s++){
-                                        const viewSpace = Object.values(this.setup.viewport)[s]
+                                        // const viewSpace = Object.values(this.setup.viewport)[s]
+                                        const viewSpace = this.setup.viewport[set.dimensions[s]]
                                         const startPoint = parseFloat(element.style.getPropertyValue(set.coordinates[s]))
                                         const centerPoint = parseFloat(element.style.getPropertyValue(set.dimensions[s]))/2
-                                        let snapPoint = viewSpace/2 - (startPoint + centerPoint)
+                                        let snapPoint = viewSpace/2 - (startPoint + centerPoint) - this.setup.startingPoint[set.coordinates[s]]
                                         let coord = parseFloat(this.mainElement.style.getPropertyValue(set.coordinates[s]))
                                         snapPoint = Math.min(snapPoint, coord)
-                                        snapPoint = Math.max(snapPoint, this.setup.range[set.dimensions[s]]+coord)
+                                        snapPoint = Math.max(snapPoint, Math.abs(this.setup.range[set.dimensions[s]]))
                                         snapPoints[s].push(snapPoint)
                                     }
                                 }
