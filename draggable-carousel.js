@@ -239,10 +239,13 @@
                                         const startPoint = parseFloat(element.style.getPropertyValue(set.coordinates[s]))
                                         const centerPoint = parseFloat(element.style.getPropertyValue(set.dimensions[s]))/2
                                         let snapPoint = viewSpace/2 - (startPoint + centerPoint) + this.setup.startingPoint[set.axises[s]]
-                                        let coord = parseFloat(this.mainElement.style.getPropertyValue(set.coordinates[s]))
+                                        // let coord = parseFloat(this.mainElement.style.getPropertyValue(set.coordinates[s]))
                                         console.log(viewSpace/2, startPoint , centerPoint , this.setup.startingPoint[set.axises[s]])
-                                        console.log(snapPoint, this.setup.range[set.dimensions[s]], coord)
+                                        console.log(snapPoint, this.setup.range[set.dimensions[s]])
+                                        snapPoint = Math.min(snapPoint, this.setup.startingPoint[set.axises[s]])
+                                        snapPoint = Math.max(snapPoint, this.setup.range[set.dimensions[s]] + this.setup.startingPoint[set.axises[s]])
                                         // snapPoint = Math.min(snapPoint, -coord)
+                                        // snapPoint = Math.max(minSnap * Math.sign(snapPoint), -maxSnap)
                                         // snapPoint = Math.max(snapPoint, this.setup.range[set.dimensions[s]])
                                         snapPoints[s].push(snapPoint)
                                     }
@@ -497,7 +500,7 @@
                                 let lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
                                 snapValues[m] = this.setup.dragMovement.currentValue[set.axises[m]] + (snapValue - this.setup.dragMovement.currentValue[set.axises[m]]) * lerpValue
                                 console.log(snapValues[m])
-                                this.setup.dragMovement.currentValue[set.axises[m]] = Math.min(snapValues[m], this.setup.range[set.dimensions[m]] * Math.sign(-snapValues[m]))
+                                this.setup.dragMovement.currentValue[set.axises[m]] = snapValues[m]
                             }
                         }
                         this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
