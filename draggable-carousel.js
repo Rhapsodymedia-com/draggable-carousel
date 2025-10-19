@@ -78,6 +78,7 @@
 
                 // MISCELLANEOUS FUNCTIONS
                 const addAccessibilityFunctionality = (clickedHotspot, currentCaro, groups) => {
+                    console.log(clickedHotspot, currentCaro, groups)
                     // WAITING TO FIND NEWLY OPENING POP-UP
                     setTimeout(() => {
                         if(clickedHotspot.focusOn==='empty')
@@ -724,11 +725,11 @@
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
                             const groupsArray = elementsArray.map(gr => gr.classList.contains('group')===true)
-                            const hotspotsArray = hotspotsObjects.map(hh => hh.classList.contains('hotspot')===true)
+                            const hotspotsArray = elementsArray.map(hh => hh.classList.contains('hotspot')===true)
 
                             const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
-                                currentHotspot.addEventListener('focus', () => {currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display); console.log(document.querySelector(':focus'))} )
+                                currentHotspot.addEventListener('focus', () => {currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display); console.log('focused: ',document.querySelector(':focus'))} )
                                 currentHotspot.addEventListener('click', () => addAccessibilityFunctionality(currentHotspot, currentCarousel, groupsArray))
                             }
                         }
