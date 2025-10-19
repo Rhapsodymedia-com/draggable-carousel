@@ -434,8 +434,9 @@
                                 let hotspotsElements = Array.from(this.mainElement.querySelectorAll('.hotspot'))
                                 for(let hotspotElement of hotspotsElements){
                                     if(hotspotElement==document.activeElement){
-                                        const focusedElement = this.mainElement.querySelector(`.ceros-hideable:has(:focus-visible)`) ?? hotspotElement
-                                        console.log(focusedElement)
+                                        const cerosHideables = Array.from(this.mainElement.querySelectorAll(`.ceros-hideable`))
+                                        const focusedElement = cerosHideables.find(cerosHideable => cerosHideable.contains(hotspotElement)) ?? hotspotElement
+                                        console.log(cerosHideables, focusedElement)
                                         for(let k=0; k<set.axises.length; k++){
                                             let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
                                             if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
