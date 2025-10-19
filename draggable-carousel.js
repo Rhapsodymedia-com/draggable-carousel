@@ -375,13 +375,11 @@
                                 const currentPosition = this.setup.dragMovement.currentValue[axisName] * -1
                                 const currentPoint = this.setup.startingPoint[axisName]
                                 if(currentData.interactiveHotspots.length===2){
-                                    console.log('cycle active for: ', this.setup.idNumber)
                                     this.triggerInteractions(currentData, currentPosition, currentPoint, true)
+                                    continue
                                 }
-                                if(currentData.interactiveHotspots.length==currentData.interactivePositions.length){
-                                    console.log('showTarget active for: ', this.setup.idNumber)
+                                if(currentData.interactiveHotspots.length==currentData.interactivePositions.length)
                                     this.triggerInteractions(currentData, currentPosition, currentPoint, false)
-                                }
                             }
                         }
                     }
@@ -424,6 +422,7 @@
                     }
 
                     updateScreenViewOnTab = keyEvent => {
+                        console.log(keyEvent.code, keyEvent.key)
                         if(keyEvent.code==='Tab'){
                             updateCanvasProportions()
                             pageScroll.style.position = 'static'
@@ -451,7 +450,7 @@
                         let lastValue = 0
                         let newDirection = 1
 
-                        this.hammerObj.on('press panmove swipe', event => {
+                        this.hammerObj.on('press panstart panmove swipe', event => {
                             newDirection = 0
                             if(lastValue > event.deltaX)
                                 newDirection = 1
@@ -491,7 +490,6 @@
                                 const snapValue = this.setup.snapPositions[m].reduce((first, second) => selectTheClosestNumber(first, second, curr))
                                 const lerpValue = Math.sin(interpolation/globalProperties.snappingDuration * Math.PI/2)
                                 snapValues[m] = curr + (snapValue-curr) * lerpValue
-                                console.log(curr, snapValue, snapValues[m])
                                 this.setup.dragMovement.currentValue[set.axises[m]] = snapValues[m]
                             }
                         }
