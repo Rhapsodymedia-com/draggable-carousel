@@ -77,6 +77,7 @@
                 }
 
                 // MISCELLANEOUS FUNCTIONS
+                // DOBRZE BY BYLO JAKBY "elementsArr" BYLO JUZ ZDEFINIOWANE ODGORNIE JAKO ARRAY GRUP !!!!!!!!!!!!!!!!!!!!!!!!!
                 const addAccessibilityFunctionality = (cta, elementsArr, draggableCaro) => {
                     let clickedHotspot = document.getElementById(cta.id)
                     const displays = elementsArr.map(dis => dis.style.display)
@@ -89,8 +90,10 @@
                         // APPLYING EVENT LISTENERS ON A LOOP THAT HAPPENS ONCE
                         if(clickedHotspot.focusOn==undefined){
                             for(let n=0; n<displays.length; n++){
+                                console.log('works0')
                                 if(elementsArr[n].style.display!=displays[n]){
-                                    let hotspotsArray = elementsArr.filter(elementsAr => elementsAr.classList.contains('hotspot')===true)
+                                    console.log('works1')
+                                    let hotspotsArray = elementsArr.filter(currentElement => currentElement.classList.contains('hotspot')===true)
                                     let insidePopUpHotspots = Array.from(elementsArr[n].querySelectorAll('.hotspot'))
                                     let outsidePopUpHotspots = hotspotsArray.filter(out => insidePopUpHotspots.includes(out)===false)
 
@@ -116,10 +119,11 @@
                             clickedHotspot.focusOn.focus()
                             const currentCarousel = carouselsArray.find(car => car.mainElement.id==draggableCaro.id)
                             console.log(currentCarousel)
-                            currentCarousel.updateScreenViewOnTab({key:'enter'})
+                            // currentCarousel.updateScreenViewOnTab({key:'enter'})
                             return
                         }
                         clickedHotspot.focusOn = 'empty'
+                        console.warn(clickedHotspot, "hotspot didn't recieved definition for 'focusOn' property")
                     }, 50)
                 }
                 const updateCanvasProportions = () => {
