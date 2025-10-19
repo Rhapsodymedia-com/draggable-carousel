@@ -730,7 +730,7 @@
 
                             const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
-                                currentHotspot.addEventListener('pointerdown', currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display))
+                                currentHotspot.addEventListener('focus', () => {currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display); console.log(document.querySelector(':focus'))} )
                                 currentHotspot.addEventListener('click', () => addAccessibilityFunctionality(currentHotspot, groupsArray))
                             }
                         }
