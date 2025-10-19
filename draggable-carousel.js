@@ -422,18 +422,29 @@
                     }
 
                     updateScreenViewOnTab = keyEvent => {
-                        console.log(keyEvent.code, keyEvent.key)
-                        if(keyEvent.code==='Tab'){
+                        console.log(keyEvent)
+                        const keyName = keyEvent.key.toLowerCase()
+                        if(keyName==='tab' || keyName==='enter'){
                             updateCanvasProportions()
                             pageScroll.style.position = 'static'
                             requestAnimationFrame(() => {
                                 let hotspotsElements = Array.from(this.mainElement.querySelectorAll('.hotspot'))
+                                console.log(document.activeElement)
                                 for(let hotspotElement of hotspotsElements){
                                     if(hotspotElement==document.activeElement){
+
+                                        // NEW PART
+                                        let focusedElement = hotspotElement
+                                        if(keyName==='enter'){
+                                            let cerosHideables = Array.from( this.mainElement.querySelectorAll(`.ceros-hideable`) )
+                                            focusedElement = cerosHideables.find(cerosHideable => cerosHideable.getElementById(hotspotElement.id)) ?? hotspotElement
+                                        }
+                                        console.log(focusedElement)
+
                                         for(let k=0; k<set.axises.length; k++){
                                             let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
                                             if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
-                                                let newVal = getDistance(hotspotElement, set.coordinates[k])
+                                                let newVal = getDistance(focusedElement, set.coordinates[k])
                                                 this.setup.dragMovement.currentValue[set.axises[k]] = Math.max(-newVal, this.setup.range[set.dimensions[k]])
                                             }
                                         }
