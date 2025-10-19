@@ -77,42 +77,8 @@
                 }
 
                 // MISCELLANEOUS FUNCTIONS
-                // DOBRZE BY BYLO JAKBY "elementsArr" BYLO JUZ ZDEFINIOWANE ODGORNIE JAKO ARRAY GRUP !!!!!!!!!!!!!!!!!!!!!!!!!
-                // const mutate = entries => {
-                //     console.log(entries)
-                //     let entry = entries.find(ent => window.carouselsArray.every(ee => ee.mainElement!=ent.target))
-                //     console.log(entry)
-                //     if(entry.classList.contains('ceros-hideable')===true && entry.style.display!='none'){
-                //         const currentCarousel = carouselsArray.find(car => car.mainElement.contains(entry))
-                //         let objectsArray = currentCarousel.cerosObj.findAllComponents().layers
-                //         let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
-                //         // let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
-
-                //         let hotspotsArray = elementsArray.filter(currentElement => currentElement.classList.contains('hotspot')===true)
-                //         let insidePopUpHotspots = Array.from(entry.querySelectorAll('.hotspot'))
-                //         let outsidePopUpHotspots = hotspotsArray.filter(out => insidePopUpHotspots.includes(out)===false)
-                //         outsidePopUpHotspots.forEach(outside => outside.tabIndex = -1)
-
-                //         if(insidePopUpHotspots.length>0 && entry.focusOn==undefined){
-                //             // FOCUSING ON FIRST HOTSPOT IN A POP-UP
-                //             entry.focusOn = insidePopUpHotspots[0]
-                //             // ENABLING AGAIN ALL HOTSPOTS IN A CAROUSEL
-                //             const lastHotspot = insidePopUpHotspots[insidePopUpHotspots.length-1]
-                //             outsidePopUpHotspots.forEach(outsidePopUp => outsidePopUp.tabIndex = 0)
-                //             // lastHotspot.addEventListener('click', clickEve => toggleOtherHotspots(0))
-                //             // FOCUSING BACK ON THE HOTSPOT THAT INITIALLY OPENED POP-UP
-                //             lastHotspot.focusOn = clickedHotspot
-                //         }
-                //         if(clickedHotspot.focusOn!=undefined){
-                //             entry.focusOn.focus()
-                //             currentCarousel.updateScreenViewOnTab({key:'tab'})
-                //         }
-                //     }
-                // }
-                // const observer = new MutationObserver(mutate)
-                const addAccessibilityFunctionality = (clickedHotspot, elementsArr, draggableCaro) => {
-                    // let clickedHotspot = document.getElementById(cta.id)
-                    // const displays = elementsArr.map(dis => dis.style.display)
+                const addAccessibilityFunctionality = (clickedHotspot, groups) => {
+                    const draggableCaro = window.carouselsArray.find(car => car.allLayers.id==clickedHotspot.id)
 
                     // WAITING TO FIND NEWLY OPENING POP-UP
                     setTimeout(() => {
@@ -121,13 +87,13 @@
 
                         // APPLYING EVENT LISTENERS ON A LOOP THAT HAPPENS ONCE
                         if(clickedHotspot.focusOn==undefined){
-                            for(let n=0; n<draggableCaro.setup.displays.length; n++){
+                            for(let n=0; n<groups.length; n++){
                                 console.log('works0')
-                                if(elementsArr[n].classList.contains('group') && elementsArr[n].style.display!=draggableCaro.setup.displays[n]){
+                                if(groups[n].style.display!=draggableCaro.setup.displays[n]){
                                     console.log('works1')
-                                    let hotspotsArray = elementsArr.filter(currentElement => currentElement.classList.contains('hotspot')===true)
-                                    let insidePopUpHotspots = Array.from(elementsArr[n].querySelectorAll('.hotspot'))
-                                    let outsidePopUpHotspots = hotspotsArray.filter(out => insidePopUpHotspots.includes(out)===false)
+                                    let allHotspots = Array.from(draggableCaro.mainElement.querySelectorAll('.hotspot'))
+                                    let insidePopUpHotspots = Array.from(groups[n].querySelectorAll('.hotspot'))
+                                    let outsidePopUpHotspots = allHotspots.filter(out => insidePopUpHotspots.includes(out)===false)
 
                                     // DISABLING HOTSPOTS IN A CAROUSEL WHICH ARE OUTSIDE CURRENT VISIBLE POP-UP
                                     const toggleOtherHotspots = (tabNumber=-1) => outsidePopUpHotspots.forEach(outside => outside.tabIndex=tabNumber)
@@ -149,8 +115,6 @@
                         }
                         if(clickedHotspot.focusOn!=undefined){
                             clickedHotspot.focusOn.focus()
-                            // const currentCarousel = carouselsArray.find(car => car.mainElement.id==draggableCaro.id)
-                            // console.log(currentCarousel)
                             draggableCaro.updateScreenViewOnTab({key:'tab'})
                             return
                         }
@@ -463,26 +427,16 @@
                     }
 
                     updateScreenViewOnTab = keyEvent => {
-                        console.log(keyEvent)
                         const keyName = keyEvent.key.toLowerCase()
                         if(keyName==='tab'){
                             updateCanvasProportions()
                             pageScroll.style.position = 'static'
                             requestAnimationFrame(() => {
                                 let hotspotsElements = Array.from(this.mainElement.querySelectorAll('.hotspot'))
-                                console.log(document.activeElement)
                                 for(let hotspotElement of hotspotsElements){
                                     if(hotspotElement==document.activeElement){
-
-                                        // NEW PART
-                                        // let focusedElement = hotspotElement
-                                        let focusedElement = this.mainElement.querySelector(`.ceros-hideable:has(:focus-visible)`) ?? hotspotElement
-                                        // if(keyName==='enter'){
-                                        //     // let cerosHideables = Array.from( this.mainElement.querySelectorAll(`.ceros-hideable:has(:focus-visible)`) )
-                                        //     // focusedElement = cerosHideables.find(cerosHideable => cerosHideable.getElementById(hotspotElement.id)) ?? hotspotElement
-                                        // }
+                                        const focusedElement = this.mainElement.querySelector(`.ceros-hideable:has(:focus-visible)`) ?? hotspotElement
                                         console.log(focusedElement)
-
                                         for(let k=0; k<set.axises.length; k++){
                                             let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
                                             if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
@@ -770,19 +724,15 @@
                         // GRANTING ACCESSIBLITY FEATURE
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
-                            let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
-                            let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
-                            let hotspotsArray = hotspotsObjects.map(ha => document.getElementById(ha.id))
-                            // hotspotsArray.forEach(ho => ho.addEventListener('pointerdown', carouselsArray[i].setup.displays = elementsArray.map(dis => dis.style.display)))
+                            let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
+                            const groupsArray = elementsArray.map(gr => gr.classList.contains('group')===true)
+                            const hotspotsArray = hotspotsObjects.map(hh => hh.classList.contains('hotspot')===true)
 
-
+                            const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
-                                currentHotspot.addEventListener('pointerdown', carouselsArray[i].setup.displays = elementsArray.map(dis => dis.style.display))
-                                currentHotspot.addEventListener('click', () => addAccessibilityFunctionality(currentHotspot, elementsArray, carouselsArray[i]))
+                                currentHotspot.addEventListener('pointerdown', currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display))
+                                currentHotspot.addEventListener('click', () => addAccessibilityFunctionality(currentHotspot, groupsArray))
                             }
-
-                            // for(let hotspotObject of hotspotsObjects)
-                            //     hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray, draggableCarousels[i]))
                         }
                     }
                 }
