@@ -78,9 +78,41 @@
 
                 // MISCELLANEOUS FUNCTIONS
                 // DOBRZE BY BYLO JAKBY "elementsArr" BYLO JUZ ZDEFINIOWANE ODGORNIE JAKO ARRAY GRUP !!!!!!!!!!!!!!!!!!!!!!!!!
-                const addAccessibilityFunctionality = (cta, elementsArr, draggableCaro) => {
-                    let clickedHotspot = document.getElementById(cta.id)
-                    const displays = elementsArr.map(dis => dis.style.display)
+                // const mutate = entries => {
+                //     console.log(entries)
+                //     let entry = entries.find(ent => window.carouselsArray.every(ee => ee.mainElement!=ent.target))
+                //     console.log(entry)
+                //     if(entry.classList.contains('ceros-hideable')===true && entry.style.display!='none'){
+                //         const currentCarousel = carouselsArray.find(car => car.mainElement.contains(entry))
+                //         let objectsArray = currentCarousel.cerosObj.findAllComponents().layers
+                //         let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
+                //         // let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
+
+                //         let hotspotsArray = elementsArray.filter(currentElement => currentElement.classList.contains('hotspot')===true)
+                //         let insidePopUpHotspots = Array.from(entry.querySelectorAll('.hotspot'))
+                //         let outsidePopUpHotspots = hotspotsArray.filter(out => insidePopUpHotspots.includes(out)===false)
+                //         outsidePopUpHotspots.forEach(outside => outside.tabIndex = -1)
+
+                //         if(insidePopUpHotspots.length>0 && entry.focusOn==undefined){
+                //             // FOCUSING ON FIRST HOTSPOT IN A POP-UP
+                //             entry.focusOn = insidePopUpHotspots[0]
+                //             // ENABLING AGAIN ALL HOTSPOTS IN A CAROUSEL
+                //             const lastHotspot = insidePopUpHotspots[insidePopUpHotspots.length-1]
+                //             outsidePopUpHotspots.forEach(outsidePopUp => outsidePopUp.tabIndex = 0)
+                //             // lastHotspot.addEventListener('click', clickEve => toggleOtherHotspots(0))
+                //             // FOCUSING BACK ON THE HOTSPOT THAT INITIALLY OPENED POP-UP
+                //             lastHotspot.focusOn = clickedHotspot
+                //         }
+                //         if(clickedHotspot.focusOn!=undefined){
+                //             entry.focusOn.focus()
+                //             currentCarousel.updateScreenViewOnTab({key:'tab'})
+                //         }
+                //     }
+                // }
+                // const observer = new MutationObserver(mutate)
+                const addAccessibilityFunctionality = (clickedHotspot, elementsArr, draggableCaro) => {
+                    // let clickedHotspot = document.getElementById(cta.id)
+                    // const displays = elementsArr.map(dis => dis.style.display)
 
                     // WAITING TO FIND NEWLY OPENING POP-UP
                     setTimeout(() => {
@@ -89,9 +121,9 @@
 
                         // APPLYING EVENT LISTENERS ON A LOOP THAT HAPPENS ONCE
                         if(clickedHotspot.focusOn==undefined){
-                            for(let n=0; n<displays.length; n++){
+                            for(let n=0; n<draggableCaro.setup.displays.length; n++){
                                 console.log('works0')
-                                if(elementsArr[n].style.display!=displays[n]){
+                                if(elementsArr[n].classList.contains('group') && elementsArr[n].style.display!=draggableCaro.setup.displays[n]){
                                     console.log('works1')
                                     let hotspotsArray = elementsArr.filter(currentElement => currentElement.classList.contains('hotspot')===true)
                                     let insidePopUpHotspots = Array.from(elementsArr[n].querySelectorAll('.hotspot'))
@@ -117,9 +149,9 @@
                         }
                         if(clickedHotspot.focusOn!=undefined){
                             clickedHotspot.focusOn.focus()
-                            const currentCarousel = carouselsArray.find(car => car.mainElement.id==draggableCaro.id)
-                            console.log(currentCarousel)
-                            currentCarousel.updateScreenViewOnTab({key:'tab'})
+                            // const currentCarousel = carouselsArray.find(car => car.mainElement.id==draggableCaro.id)
+                            // console.log(currentCarousel)
+                            draggableCaro.updateScreenViewOnTab({key:'tab'})
                             return
                         }
                         clickedHotspot.focusOn = 'empty'
@@ -614,16 +646,6 @@
                             startingCoordinates.push(startingCoordinate)
                         }
 
-                        // GRANTING ACCESSIBLITY FEATURE
-                        if(cerosContext.featureFlags.Accessibility===true){
-                            let objectsArray = draggableCarousels[i].findAllComponents().layers
-                            let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
-                            let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
-
-                            for(let hotspotObject of hotspotsObjects)
-                                hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray, draggableCarousels[i]))
-                        }
-
                         // DEFINING CAROUSEL HORIZONTAL MARGINS
                         let extraSpace = 0
                         for(let marginName of set.margins){
@@ -744,6 +766,24 @@
                         carouselsArray[i] = new Carousel(draggableCarousel, draggableCarousels[i], hammerObject, settings)
                         carouselsArray[i].updateOnDragStart()
                         carouselsArray[i].updateOnDragEnd()
+
+                        // GRANTING ACCESSIBLITY FEATURE
+                        if(cerosContext.featureFlags.Accessibility===true){
+                            let objectsArray = draggableCarousels[i].findAllComponents().layers
+                            let elementsArray = objectsArray.map(oo => document.getElementById(oo.id))
+                            let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
+                            let hotspotsArray = hotspotsObjects.map(ha => document.getElementById(ha.id))
+                            // hotspotsArray.forEach(ho => ho.addEventListener('pointerdown', carouselsArray[i].setup.displays = elementsArray.map(dis => dis.style.display)))
+
+
+                            for(let currentHotspot of hotspotsArray){
+                                currentHotspot.addEventListener('pointerdown', carouselsArray[i].setup.displays = elementsArray.map(dis => dis.style.display))
+                                currentHotspot.addEventListener('click', () => addAccessibilityFunctionality(currentHotspot, elementsArray, carouselsArray[i]))
+                            }
+
+                            // for(let hotspotObject of hotspotsObjects)
+                            //     hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray, draggableCarousels[i]))
+                        }
                     }
                 }
                 experience.on(CerosSDK.EVENTS.PAGE_CHANGED, pageChangedCallback)
