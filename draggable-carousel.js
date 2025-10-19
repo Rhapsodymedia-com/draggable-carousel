@@ -724,8 +724,8 @@
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
-                            const groupsArray = elementsArray.map(gr => gr.classList.contains('group')===true)
-                            const hotspotsArray = elementsArray.map(hh => hh.classList.contains('hotspot')===true)
+                            const groupsArray = elementsArray.filter(gr => gr.classList.contains('group')===true)
+                            const hotspotsArray = elementsArray.filter(hh => hh.classList.contains('hotspot')===true)
 
                             const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
