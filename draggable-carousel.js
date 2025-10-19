@@ -77,7 +77,7 @@
                 }
 
                 // MISCELLANEOUS FUNCTIONS
-                const addAccessibilityFunctionality = (cta, elementsArr) => {
+                const addAccessibilityFunctionality = (cta, elementsArr, draggableCaro) => {
                     let clickedHotspot = document.getElementById(cta.id)
                     const displays = elementsArr.map(dis => dis.style.display)
 
@@ -99,11 +99,13 @@
                                     toggleOtherHotspots()
                                     clickedHotspot.addEventListener('click', clickEvent => toggleOtherHotspots())
 
-                                    // ENABLING BACK ALL HOTSPOTS IN A CAROUSEL
                                     if(insidePopUpHotspots.length>0){
+                                        // FOCUSING ON FIRST HOTSPOT IN A POP-UP
                                         clickedHotspot.focusOn = insidePopUpHotspots[0]
-                                        let lastHotspot = insidePopUpHotspots[insidePopUpHotspots.length-1]
+                                        // ENABLING AGAIN ALL HOTSPOTS IN A CAROUSEL
+                                        const lastHotspot = insidePopUpHotspots[insidePopUpHotspots.length-1]
                                         lastHotspot.addEventListener('click', clickEve => toggleOtherHotspots(0))
+                                        // FOCUSING BACK ON THE HOTSPOT THAT INITIALLY OPENED POP-UP
                                         lastHotspot.focusOn = clickedHotspot
                                     }
                                     break
@@ -112,6 +114,9 @@
                         }
                         if(clickedHotspot.focusOn!=undefined){
                             clickedHotspot.focusOn.focus()
+                            const currentCarousel = carouselsArray.find(car => car.mainElement.id==draggableCaro.id)
+                            console.log(currentCarousel)
+                            currentCarousel.updateScreenViewOnTab({key:'enter'})
                             return
                         }
                         clickedHotspot.focusOn = 'empty'
@@ -612,7 +617,7 @@
                             let hotspotsObjects = objectsArray.filter(hh => hh.type==='hotspot')
 
                             for(let hotspotObject of hotspotsObjects)
-                                hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray))
+                                hotspotObject.on(CerosSDK.EVENTS.CLICKED, hotspotObj => addAccessibilityFunctionality(hotspotObj, elementsArray, draggableCarousels[i]))
                         }
 
                         // DEFINING CAROUSEL HORIZONTAL MARGINS
