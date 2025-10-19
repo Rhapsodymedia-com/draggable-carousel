@@ -119,7 +119,7 @@
                             clickedHotspot.focusOn.focus()
                             const currentCarousel = carouselsArray.find(car => car.mainElement.id==draggableCaro.id)
                             console.log(currentCarousel)
-                            // currentCarousel.updateScreenViewOnTab({key:'enter'})
+                            currentCarousel.updateScreenViewOnTab({key:'tab'})
                             return
                         }
                         clickedHotspot.focusOn = 'empty'
@@ -433,7 +433,7 @@
                     updateScreenViewOnTab = keyEvent => {
                         console.log(keyEvent)
                         const keyName = keyEvent.key.toLowerCase()
-                        if(keyName==='tab' || keyName==='enter'){
+                        if(keyName==='tab'){
                             updateCanvasProportions()
                             pageScroll.style.position = 'static'
                             requestAnimationFrame(() => {
@@ -443,12 +443,12 @@
                                     if(hotspotElement==document.activeElement){
 
                                         // NEW PART
-                                        let focusedElement = hotspotElement
-                                        if(keyName==='enter'){
-                                            focusedElement = this.mainElement.querySelector(`.ceros-hideable:has(:focus-visible)`) ?? hotspotElement
-                                            // let cerosHideables = Array.from( this.mainElement.querySelectorAll(`.ceros-hideable:has(:focus-visible)`) )
-                                            // focusedElement = cerosHideables.find(cerosHideable => cerosHideable.getElementById(hotspotElement.id)) ?? hotspotElement
-                                        }
+                                        // let focusedElement = hotspotElement
+                                        let focusedElement = this.mainElement.querySelector(`.ceros-hideable:has(:focus-visible)`) ?? hotspotElement
+                                        // if(keyName==='enter'){
+                                        //     // let cerosHideables = Array.from( this.mainElement.querySelectorAll(`.ceros-hideable:has(:focus-visible)`) )
+                                        //     // focusedElement = cerosHideables.find(cerosHideable => cerosHideable.getElementById(hotspotElement.id)) ?? hotspotElement
+                                        // }
                                         console.log(focusedElement)
 
                                         for(let k=0; k<set.axises.length; k++){
