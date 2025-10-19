@@ -713,7 +713,7 @@
                         hammerObject.get('pinch').set({ enable: false })
                         hammerObject.get('rotate').set({ enable: false })
                         hammerObject.get('swipe').set({ enable: true })
-                        hammerObject.get('tap').set({ enable: false })
+                        hammerObject.get('tap').set({ time: 100 })
                         hammerObject.get('doubletap').set({ enable: false })
 
                         // INITIALIZING CAROUSEL FUNCTIONALITY
