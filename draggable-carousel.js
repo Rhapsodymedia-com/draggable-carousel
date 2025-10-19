@@ -436,8 +436,9 @@
                                         // NEW PART
                                         let focusedElement = hotspotElement
                                         if(keyName==='enter'){
-                                            let cerosHideables = Array.from( this.mainElement.querySelectorAll(`.ceros-hideable`) )
-                                            focusedElement = cerosHideables.find(cerosHideable => cerosHideable.getElementById(hotspotElement.id)) ?? hotspotElement
+                                            focusedElement = this.mainElement.querySelector(`.ceros-hideable:has(:focus-visible)`) ?? hotspotElement
+                                            // let cerosHideables = Array.from( this.mainElement.querySelectorAll(`.ceros-hideable:has(:focus-visible)`) )
+                                            // focusedElement = cerosHideables.find(cerosHideable => cerosHideable.getElementById(hotspotElement.id)) ?? hotspotElement
                                         }
                                         console.log(focusedElement)
 
