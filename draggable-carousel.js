@@ -452,7 +452,6 @@
                     updateOnDragStart(){
                         let lastValue = 0
                         let newDirection = 1
-                        this.isActiveState = false
 
                         this.hammerObj.on('press panstart panmove swipe', event => {
                             console.log('ON: ', event)
@@ -470,8 +469,7 @@
                             this.isSnapping = false
                             this.updateTime()
                             this.updateOnDragging()
-                            this.isActiveState = event.type==='press' ? !this.isActiveState : true
-                            this.switchStates(this.isActiveState)
+                            this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
                         })
                         window.addEventListener('keydown', this.updateScreenViewOnTab)
@@ -548,20 +546,18 @@
 
                         this.hammerObj.on('pressup panend pancancel', eve => {
                             console.log(eve)
-                            this.isActiveState = false
                             this.refreshOldValue()
                             
                             this.isSliding = this.setup.slideIndicator!=0
                             const vel = Math.abs(eve[velocityType] / Math.sqrt(this.setup.slideIndicator))
                             this.animateSliding(0, vel)
                             this.snapToPosition(this.isSliding===false)
-                            this.switchStates(false)
+                            requestAnimationFrame(this.switchStates(false))
                             this.updateChildrenStyling()
                         })
                         this.mainElement.addEventListener('pointerup', ev => {
                             console.log(ev)
-                            this.isActiveState = false
-                            this.switchStates(false)
+                            requestAnimationFrame(this.switchStates(false))
                         }, {capture: true} )
                     }
                 }
