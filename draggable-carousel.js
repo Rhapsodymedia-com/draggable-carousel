@@ -442,14 +442,10 @@
                     }
 
                     updateScreenViewOnTab = keyEvent => {
-                        const keyName = keyEvent.key.toLowerCase()
-                        if(keyName==='tab'){
+                        if(keyEvent.key.toLowerCase()==='tab'){
                             updateCanvasProportions()
-                            requestAnimationFrame(() => checkForInteraction('hotspot'))
+                            requestAnimationFrame(() => this.checkForInteraction('hotspot'))
                         }
-                        // console.log(keyName)
-                        // requestAnimationFrame(() => pageScroll.scrollLeft = 0)
-                        // console.log(pageScroll.scrollLeft)
                     }
 
                     updateOnDragStart(){
@@ -473,6 +469,10 @@
                             this.updateOnDragging()
                             this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
+                        })
+                        pageScroll.addEventListener('scroll', ee => {
+                            pageScroll.scrollLeft = 0
+                            this.checkForInteraction('text')
                         })
                         window.addEventListener('keydown', this.updateScreenViewOnTab)
                         this.updateChildrenStyling(newDirection, false)
@@ -721,7 +721,6 @@
 
                         
                         // GRANTING ACCESSIBLITY FEATURE
-                        pageScroll.addEventListener('scroll', ee => {pageScroll.scrollLeft = 0; checkForInteraction('text')})
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
