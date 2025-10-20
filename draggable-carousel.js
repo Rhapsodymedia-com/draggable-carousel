@@ -444,7 +444,9 @@
                                 }
                             })
                         }
-                        requestAnimationFrame(() => pageScroll.scrollLeft = 0)
+                        console.log(keyName)
+                        // requestAnimationFrame(() => pageScroll.scrollLeft = 0)
+                        // console.log(pageScroll.scrollLeft)
                     }
 
                     updateOnDragStart(){
@@ -714,7 +716,9 @@
                         carouselsArray[i].updateOnDragStart()
                         carouselsArray[i].updateOnDragEnd()
 
+                        
                         // GRANTING ACCESSIBLITY FEATURE
+                        pageScroll.addEventListener('scroll', ee => {pageScroll.scrollLeft = 0; console.log('works')})
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
