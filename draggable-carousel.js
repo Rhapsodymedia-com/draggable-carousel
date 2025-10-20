@@ -419,7 +419,7 @@
                         this.oldTime = currentTime
                     }
 
-                    updateScreenView(){
+                    updateScreenView = () => {
                         let nodes = Array.from(this.mainElement.querySelectorAll('.hotspot'))
                         for(let node of nodes){
                             if(node==document.activeElement){
