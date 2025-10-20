@@ -425,7 +425,7 @@
                         let nodes = Array.from(this.mainElement.querySelectorAll(`.${className}`))
                         for(let node of nodes){
                             if(node==document.activeElement){
-                                console.log(node)
+                                // console.log(node)
                                 const cerosHideables = Array.from(this.mainElement.querySelectorAll(`.ceros-hideable`))
                                 const focusedElement = cerosHideables.find(cerosHideable => cerosHideable.contains(node)) ?? node
                                 for(let k=0; k<set.axises.length; k++){
@@ -471,8 +471,12 @@
                             this.updateChildrenStyling(newDirection, true)
                         })
                         pageScroll.addEventListener('scroll', ee => {
+                            this.setup.dragMovement.currentValue.x += -pageScroll.scrollLeft
+                            console.log(this.setup.dragMovement.currentValue.x)
+                            this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
+                            this.refreshOldValue()
                             pageScroll.scrollLeft = 0
-                            this.checkForInteraction('text')
+                            // this.checkForInteraction('text')
                         })
                         window.addEventListener('keydown', this.updateScreenViewOnTab)
                         this.updateChildrenStyling(newDirection, false)
@@ -726,6 +730,8 @@
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
                             const groupsArray = elementsArray.filter(gr => gr.classList.contains('group')===true && gr.style.display==='none')
                             const hotspotsArray = elementsArray.filter(hh => hh.classList.contains('hotspot')===true)
+                            const textsArray = elementsArray.filter(txt => txt.classList.contains('text')===true || txt.classList.contains('text-plus')===true)
+                            // textsArray.forEach(currentText => currentText.addEventListener('focus', ))
 
                             const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
