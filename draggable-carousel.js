@@ -438,10 +438,10 @@
                         }
                     }
 
-                    checkForInteraction(keyEvent){
+                    checkForInteraction = keyEvent => {
                         if(keyEvent.key.toLowerCase()==='tab'){
                             updateCanvasProportions()
-                            requestAnimationFrame( this.updateScreenView() )
+                            requestAnimationFrame( this.updateScreenView )
                         }
                     }
 
