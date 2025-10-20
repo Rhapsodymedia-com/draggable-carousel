@@ -422,10 +422,10 @@
                     }
 
                     updateScreenViewOnTab = keyEvent => {
+                        pageScroll.style.position = 'static'
                         const keyName = keyEvent.key.toLowerCase()
                         if(keyName==='tab'){
                             updateCanvasProportions()
-                            pageScroll.style.position = 'static'
                             requestAnimationFrame(() => {
                                 let hotspotsElements = Array.from(this.mainElement.querySelectorAll('.hotspot'))
                                 for(let hotspotElement of hotspotsElements){
@@ -443,9 +443,9 @@
                                         this.refreshOldValue()
                                     }
                                 }
-                                pageScroll.style.position = 'absolute'
                             })
                         }
+                        requestAnimationFrame(() => pageScroll.style.position = 'absolute')
                     }
 
                     updateOnDragStart(){
