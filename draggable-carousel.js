@@ -422,7 +422,6 @@
                     }
 
                     updateScreenViewOnTab = keyEvent => {
-                        pageScroll.style.position = 'static'
                         const keyName = keyEvent.key.toLowerCase()
                         if(keyName==='tab'){
                             updateCanvasProportions()
@@ -445,7 +444,7 @@
                                 }
                             })
                         }
-                        requestAnimationFrame(() => pageScroll.style.position = 'absolute')
+                        requestAnimationFrame(() => pageScroll.scrollLeft = 0)
                     }
 
                     updateOnDragStart(){
