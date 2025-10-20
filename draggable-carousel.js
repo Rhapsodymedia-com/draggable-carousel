@@ -455,6 +455,8 @@
 
                         this.hammerObj.on('press panstart panmove swipe', event => {
                             console.log('ON: ', event)
+                            this.switchStates(true)
+
                             newDirection = 0
                             if(lastValue > event.deltaX)
                                 newDirection = 1
@@ -469,8 +471,8 @@
                             this.isSnapping = false
                             this.updateTime()
                             this.updateOnDragging()
-                            this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
+                            this.switchStates(false)
                         })
                         window.addEventListener('keydown', this.updateScreenViewOnTab)
                         this.updateChildrenStyling(newDirection, false)
@@ -552,12 +554,12 @@
                             const vel = Math.abs(eve[velocityType] / Math.sqrt(this.setup.slideIndicator))
                             this.animateSliding(0, vel)
                             this.snapToPosition(this.isSliding===false)
-                            requestAnimationFrame(this.switchStates(false))
+                            this.switchStates(false)
                             this.updateChildrenStyling()
                         })
                         this.mainElement.addEventListener('pointerup', ev => {
                             console.log(ev)
-                            requestAnimationFrame(this.switchStates(false))
+                            this.switchStates(false)
                         }, {capture: true} )
                     }
                 }
