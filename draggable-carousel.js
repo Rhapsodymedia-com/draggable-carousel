@@ -470,7 +470,7 @@
                             this.isSnapping = false
                             this.updateTime()
                             this.updateOnDragging()
-                            this.isActiveState = !this.isActiveState
+                            this.isActiveState = event.type==='press' ? !this.isActiveState : true
                             this.switchStates(this.isActiveState)
                             this.updateChildrenStyling(newDirection, true)
                         })
