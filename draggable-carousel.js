@@ -472,7 +472,7 @@
                             this.updateOnDragging()
                             this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
-                            requestAnimationFrame(() => this.switchStates(false))
+                            // requestAnimationFrame(() => this.switchStates(false))
                         })
                         window.addEventListener('keydown', this.updateScreenViewOnTab)
                         this.updateChildrenStyling(newDirection, false)
@@ -554,9 +554,9 @@
                             const vel = Math.abs(eve[velocityType] / Math.sqrt(this.setup.slideIndicator))
                             this.animateSliding(0, vel)
                             this.snapToPosition(this.isSliding===false)
-                            // this.switchStates(false)
+                            this.switchStates(false)
                             this.updateChildrenStyling()
-                            requestAnimationFrame(() => this.switchStates(false))
+                            // requestAnimationFrame(() => this.switchStates(false))
                         })
                         this.mainElement.addEventListener('pointerup', ev => {
                             console.log(ev)
@@ -710,10 +710,10 @@
 
                         // HAMMER.JS
                         const hammerObject = new Hammer(draggableCarousel)
-                        hammerObject.get('press').set({ time: 151 })
+                        hammerObject.get('press').set({ time: 151, threshold: 1 })
                         settings.isFreeMovementActive = settings.directionAxis==='both' || settings.directionAxis==='all'
                         const dir = settings.isFreeMovementActive===true ? 'all' : settings.directionAxis
-                        hammerObject.get('pan').set({ direction: Hammer[`DIRECTION_${dir.toUpperCase()}`], threshold: 1 })
+                        hammerObject.get('pan').set({ direction: Hammer[`DIRECTION_${dir.toUpperCase()}`], threshold: 2 })
                         hammerObject.get('pinch').set({ enable: false })
                         hammerObject.get('rotate').set({ enable: false })
                         hammerObject.get('swipe').set({ enable: true })
