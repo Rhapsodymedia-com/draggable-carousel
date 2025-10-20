@@ -96,13 +96,11 @@
                                     toggleOtherHotspots()
                                     clickedHotspot.addEventListener('click', clickEvent => toggleOtherHotspots())
 
+                                    // DEFINING FOCUS TO THE FIRST AND LAST HOTSPOT IN A POP-UP
                                     if(insidePopUpHotspots.length>0){
-                                        // DEFINING FOCUS TO FIRST HOTSPOT IN A POP-UP
                                         clickedHotspot.focusOn = insidePopUpHotspots[0]
-                                        // ENABLING AGAIN ALL HOTSPOTS IN A CAROUSEL
                                         const lastHotspot = insidePopUpHotspots[insidePopUpHotspots.length-1]
                                         lastHotspot.addEventListener('click', clickEve => toggleOtherHotspots(0))
-                                        // DEFINING FOCUS BACK TO THE HOTSPOT THAT INITIALLY OPENED POP-UP
                                         lastHotspot.focusOn = clickedHotspot
                                     }
                                     break
@@ -111,7 +109,7 @@
                         }
                         if(clickedHotspot.focusOn!=undefined){
                             clickedHotspot.focusOn.focus()
-                            currentCaro.updateScreenViewOnTab({key:'tab'})
+                            currentCaro.checkForInteraction({key:'tab'})
                             return
                         }
                         clickedHotspot.focusOn = 'empty'
@@ -421,11 +419,10 @@
                         this.oldTime = currentTime
                     }
 
-                    checkForInteraction(className){
-                        let nodes = Array.from(this.mainElement.querySelectorAll(`.${className}`))
+                    updateScreenView(){
+                        let nodes = Array.from(this.mainElement.querySelectorAll('.hotspot'))
                         for(let node of nodes){
                             if(node==document.activeElement){
-                                // console.log(node)
                                 const cerosHideables = Array.from(this.mainElement.querySelectorAll(`.ceros-hideable`))
                                 const focusedElement = cerosHideables.find(cerosHideable => cerosHideable.contains(node)) ?? node
                                 for(let k=0; k<set.axises.length; k++){
@@ -441,10 +438,10 @@
                         }
                     }
 
-                    updateScreenViewOnTab = keyEvent => {
+                    checkForInteraction(keyEvent){
                         if(keyEvent.key.toLowerCase()==='tab'){
                             updateCanvasProportions()
-                            requestAnimationFrame(() => this.checkForInteraction('hotspot'))
+                            requestAnimationFrame( this.updateScreenView )
                         }
                     }
 
@@ -470,15 +467,15 @@
                             this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
                         })
+
                         pageScroll.addEventListener('scroll', ee => {
-                            this.setup.dragMovement.currentValue.x += -pageScroll.scrollLeft
-                            console.log(this.setup.dragMovement.currentValue.x)
+                            this.setup.dragMovement.currentValue.x += -(pageScroll.scrollLeft/proportions)
+                            this.setup.dragMovement.currentValue.x = Math.max(this.setup.dragMovement.currentValue.x, this.setup.range.width)
                             this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
                             this.refreshOldValue()
                             pageScroll.scrollLeft = 0
-                            // this.checkForInteraction('text')
                         })
-                        window.addEventListener('keydown', this.updateScreenViewOnTab)
+                        window.addEventListener('keydown', this.checkForInteraction)
                         this.updateChildrenStyling(newDirection, false)
                     }
 
@@ -723,15 +720,12 @@
                         carouselsArray[i].updateOnDragStart()
                         carouselsArray[i].updateOnDragEnd()
 
-                        
                         // GRANTING ACCESSIBLITY FEATURE
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
                             const groupsArray = elementsArray.filter(gr => gr.classList.contains('group')===true && gr.style.display==='none')
                             const hotspotsArray = elementsArray.filter(hh => hh.classList.contains('hotspot')===true)
-                            const textsArray = elementsArray.filter(txt => txt.classList.contains('text')===true || txt.classList.contains('text-plus')===true)
-                            // textsArray.forEach(currentText => currentText.addEventListener('focus', ))
 
                             const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
