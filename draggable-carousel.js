@@ -472,7 +472,7 @@
                             this.updateOnDragging()
                             this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
-                            // requestAnimationFrame(this.switchStates(false))
+                            requestAnimationFrame(this.switchStates(false))
                         })
                         window.addEventListener('keydown', this.updateScreenViewOnTab)
                         this.updateChildrenStyling(newDirection, false)
@@ -556,12 +556,12 @@
                             this.snapToPosition(this.isSliding===false)
                             this.switchStates(false)
                             this.updateChildrenStyling()
-                            requestAnimationFrame(this.switchStates(false))
+                            // requestAnimationFrame(this.switchStates(false))
                         })
                         this.mainElement.addEventListener('pointerup', ev => {
                             console.log(ev)
                             this.switchStates(false)
-                            requestAnimationFrame(this.switchStates(false))
+                            // requestAnimationFrame(this.switchStates(false))
                         }, {capture: true} )
                     }
                 }
