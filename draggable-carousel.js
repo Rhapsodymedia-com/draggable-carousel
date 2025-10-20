@@ -432,7 +432,6 @@
                                     if(hotspotElement==document.activeElement){
                                         const cerosHideables = Array.from(this.mainElement.querySelectorAll(`.ceros-hideable`))
                                         const focusedElement = cerosHideables.find(cerosHideable => cerosHideable.contains(hotspotElement)) ?? hotspotElement
-                                        console.log(cerosHideables, focusedElement)
                                         for(let k=0; k<set.axises.length; k++){
                                             let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
                                             if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
@@ -454,8 +453,6 @@
                         let newDirection = 1
 
                         this.hammerObj.on('press panstart panmove swipe', event => {
-                            console.log('ON: ', event)
-
                             newDirection = 0
                             if(lastValue > event.deltaX)
                                 newDirection = 1
@@ -472,7 +469,6 @@
                             this.updateOnDragging()
                             this.switchStates(true)
                             this.updateChildrenStyling(newDirection, true)
-                            // requestAnimationFrame(() => this.switchStates(false))
                         })
                         window.addEventListener('keydown', this.updateScreenViewOnTab)
                         this.updateChildrenStyling(newDirection, false)
@@ -547,7 +543,6 @@
                         }
 
                         this.hammerObj.on('pressup panend pancancel', eve => {
-                            console.log(eve)
                             this.refreshOldValue()
                             
                             this.isSliding = this.setup.slideIndicator!=0
@@ -556,13 +551,8 @@
                             this.snapToPosition(this.isSliding===false)
                             this.switchStates(false)
                             this.updateChildrenStyling()
-                            // requestAnimationFrame(() => this.switchStates(false))
                         })
-                        this.mainElement.addEventListener('pointerup', ev => {
-                            console.log(ev)
-                            this.switchStates(false)
-                            // requestAnimationFrame(() => this.switchStates(false))
-                        }, {capture: true} )
+                        this.mainElement.addEventListener('pointerup', ev => this.switchStates(false), {capture: true} )
                     }
                 }
 
