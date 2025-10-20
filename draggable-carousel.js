@@ -556,7 +556,8 @@
                             this.switchStates(false)
                             this.updateChildrenStyling()
                         })
-                        this.hammerObj.on('tap', ev => {console.log(ev); this.switchStates(false)})
+                        this.mainElement.addEventListener('pointerup', ev => {console.log(ev); this.switchStates(false)}, {capture: true})
+                        // this.hammerObj.on('tap', ev => {console.log(ev); this.switchStates(false)})
                     }
                 }
 
@@ -711,7 +712,7 @@
                         hammerObject.get('pinch').set({ enable: false })
                         hammerObject.get('rotate').set({ enable: false })
                         hammerObject.get('swipe').set({ enable: true })
-                        hammerObject.get('tap').set({ time: 100 })
+                        hammerObject.get('tap').set({ enable: false })
                         hammerObject.get('doubletap').set({ enable: false })
 
                         // INITIALIZING CAROUSEL FUNCTIONALITY
