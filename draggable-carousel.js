@@ -78,7 +78,6 @@
 
                 // MISCELLANEOUS FUNCTIONS
                 const addAccessibilityFunctionality = (clickedHotspot, currentCaro, groups) => {
-                    console.log(clickedHotspot, currentCaro, groups)
                     // WAITING TO FIND NEWLY OPENING POP-UP
                     setTimeout(() => {
                         if(clickedHotspot.focusOn==='empty')
@@ -87,9 +86,7 @@
                         // APPLYING EVENT LISTENERS ON A LOOP THAT HAPPENS ONCE
                         if(clickedHotspot.focusOn==undefined){
                             for(let n=0; n<currentCaro.setup.displays.length; n++){
-                                console.log('works0')
                                 if(currentCaro.setup.displays[n]!=groups[n]?.style.display){
-                                    console.log('works1')
                                     let allHotspots = Array.from(currentCaro.mainElement.querySelectorAll('.hotspot'))
                                     let insidePopUpHotspots = Array.from(groups[n].querySelectorAll('.hotspot'))
                                     let outsidePopUpHotspots = allHotspots.filter(out => insidePopUpHotspots.includes(out)===false)
@@ -100,12 +97,12 @@
                                     clickedHotspot.addEventListener('click', clickEvent => toggleOtherHotspots())
 
                                     if(insidePopUpHotspots.length>0){
-                                        // FOCUSING ON FIRST HOTSPOT IN A POP-UP
+                                        // DEFINING FOCUS TO FIRST HOTSPOT IN A POP-UP
                                         clickedHotspot.focusOn = insidePopUpHotspots[0]
                                         // ENABLING AGAIN ALL HOTSPOTS IN A CAROUSEL
                                         const lastHotspot = insidePopUpHotspots[insidePopUpHotspots.length-1]
                                         lastHotspot.addEventListener('click', clickEve => toggleOtherHotspots(0))
-                                        // FOCUSING BACK ON THE HOTSPOT THAT INITIALLY OPENED POP-UP
+                                        // DEFINING FOCUS BACK TO THE HOTSPOT THAT INITIALLY OPENED POP-UP
                                         lastHotspot.focusOn = clickedHotspot
                                     }
                                     break
@@ -118,7 +115,6 @@
                             return
                         }
                         clickedHotspot.focusOn = 'empty'
-                        console.warn(clickedHotspot, "hotspot didn't recieved definition for 'focusOn' property")
                     }, 50)
                 }
                 const updateCanvasProportions = () => {
@@ -458,6 +454,7 @@
                         let newDirection = 1
 
                         this.hammerObj.on('press panstart panmove swipe', event => {
+                            console.log('ON: ', event)
                             newDirection = 0
                             if(lastValue > event.deltaX)
                                 newDirection = 1
@@ -549,6 +546,7 @@
                         }
 
                         this.hammerObj.on('pressup panend pancancel', eve => {
+                            console.log(eve)
                             this.refreshOldValue()
 
                             this.isSliding = this.setup.slideIndicator!=0
@@ -558,7 +556,7 @@
                             this.switchStates(false)
                             this.updateChildrenStyling()
                         })
-                        this.hammerObj.on('tap', ev => this.switchStates(false))
+                        this.hammerObj.on('tap', ev => {console.log(ev); this.switchStates(false)})
                     }
                 }
 
@@ -730,7 +728,7 @@
 
                             const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
-                                currentHotspot.addEventListener('focus', () => {currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display); console.log('focused: ',document.querySelector(':focus'))} )
+                                currentHotspot.addEventListener('focus', () => currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display))
                                 currentHotspot.addEventListener('click', () => addAccessibilityFunctionality(currentHotspot, currentCarousel, groupsArray))
                             }
                         }
