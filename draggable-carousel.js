@@ -421,30 +421,33 @@
                         this.oldTime = currentTime
                     }
 
+                    checkForInteraction(className){
+                        let nodes = Array.from(this.mainElement.querySelectorAll(`.${className}`))
+                        for(let node of nodes){
+                            if(node==document.activeElement){
+                                console.log(node)
+                                const cerosHideables = Array.from(this.mainElement.querySelectorAll(`.ceros-hideable`))
+                                const focusedElement = cerosHideables.find(cerosHideable => cerosHideable.contains(node)) ?? node
+                                for(let k=0; k<set.axises.length; k++){
+                                    let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
+                                    if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
+                                        let newVal = getDistance(focusedElement, set.coordinates[k])
+                                        this.setup.dragMovement.currentValue[set.axises[k]] = Math.max(-newVal, this.setup.range[set.dimensions[k]])
+                                    }
+                                }
+                                this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
+                                this.refreshOldValue()
+                            }
+                        }
+                    }
+
                     updateScreenViewOnTab = keyEvent => {
                         const keyName = keyEvent.key.toLowerCase()
                         if(keyName==='tab'){
                             updateCanvasProportions()
-                            requestAnimationFrame(() => {
-                                let hotspotsElements = Array.from(this.mainElement.querySelectorAll('.hotspot'))
-                                for(let hotspotElement of hotspotsElements){
-                                    if(hotspotElement==document.activeElement){
-                                        const cerosHideables = Array.from(this.mainElement.querySelectorAll(`.ceros-hideable`))
-                                        const focusedElement = cerosHideables.find(cerosHideable => cerosHideable.contains(hotspotElement)) ?? hotspotElement
-                                        for(let k=0; k<set.axises.length; k++){
-                                            let oppositeValue = k===0 ? set.dimensions[1] : set.dimensions[0]
-                                            if(this.setup.directionAxis==set.directions[k] || this.setup.range[oppositeValue]===0){
-                                                let newVal = getDistance(focusedElement, set.coordinates[k])
-                                                this.setup.dragMovement.currentValue[set.axises[k]] = Math.max(-newVal, this.setup.range[set.dimensions[k]])
-                                            }
-                                        }
-                                        this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
-                                        this.refreshOldValue()
-                                    }
-                                }
-                            })
+                            requestAnimationFrame(() => checkForInteraction('hotspot'))
                         }
-                        console.log(keyName)
+                        // console.log(keyName)
                         // requestAnimationFrame(() => pageScroll.scrollLeft = 0)
                         // console.log(pageScroll.scrollLeft)
                     }
@@ -718,7 +721,7 @@
 
                         
                         // GRANTING ACCESSIBLITY FEATURE
-                        pageScroll.addEventListener('scroll', ee => {pageScroll.scrollLeft = 0; console.log('works')})
+                        pageScroll.addEventListener('scroll', ee => {pageScroll.scrollLeft = 0; checkForInteraction('text')})
                         if(cerosContext.featureFlags.Accessibility===true){
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
