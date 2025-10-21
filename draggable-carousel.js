@@ -439,6 +439,7 @@
                     }
 
                     checkForInteraction = keyEvent => {
+                        console.log(keyEvent)
                         if(keyEvent.key.toLowerCase()==='tab'){
                             updateCanvasProportions()
                             requestAnimationFrame( this.updateScreenView )
