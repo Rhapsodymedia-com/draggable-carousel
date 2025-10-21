@@ -726,9 +726,16 @@
                                 parentElem.style.left = '0px'
                                 draggableCarousel.style.left = `${leftValue}px`
                             }
+                            // parentElem.addEventListener('scroll', ee => {
+                            //     const maxScroll = Math.abs(currentCarousel.setup.range.width - Math.min(currentCarousel.setup.dragMovement.currentValue.x, 0))
+                            //     parentElem.scrollLeft = Math.min(parentElem.scrollLeft, maxScroll)
+                            // })
                             parentElem.addEventListener('scroll', ee => {
-                                const maxScroll = Math.abs(currentCarousel.setup.range.width - Math.min(currentCarousel.setup.dragMovement.currentValue.x, 0))
-                                parentElem.scrollLeft = Math.min(parentElem.scrollLeft, maxScroll)
+                                currentCarousel.setup.dragMovement.currentValue.x += -(parentElem.scrollLeft/proportions)
+                                currentCarousel.setup.dragMovement.currentValue.x = Math.max(currentCarousel.setup.dragMovement.currentValue.x, currentCarousel.setup.range.width)
+                                currentCarousel.mainElement.style.transform = `translate3d(${currentCarousel.setup.dragMovement.currentValue.x}px, ${currentCarousel.setup.dragMovement.currentValue.y}px, 0px)`
+                                currentCarousel.refreshOldValue()
+                                parentElem.scrollLeft = 0
                             })
 
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
