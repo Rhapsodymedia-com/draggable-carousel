@@ -439,7 +439,6 @@
                     }
 
                     checkForInteraction = keyEvent => {
-                        console.log(keyEvent)
                         if(keyEvent.key.toLowerCase()==='tab'){
                             updateCanvasProportions()
                             requestAnimationFrame( this.updateScreenView )
@@ -469,13 +468,6 @@
                             this.updateChildrenStyling(newDirection, true)
                         })
 
-                        // pageScroll.addEventListener('scroll', ee => {
-                        //     this.setup.dragMovement.currentValue.x += -(pageScroll.scrollLeft/proportions)
-                        //     this.setup.dragMovement.currentValue.x = Math.max(this.setup.dragMovement.currentValue.x, this.setup.range.width)
-                        //     this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
-                        //     this.refreshOldValue()
-                        //     pageScroll.scrollLeft = 0
-                        // })
                         window.addEventListener('keydown', this.checkForInteraction)
                         this.updateChildrenStyling(newDirection, false)
                     }
@@ -723,18 +715,26 @@
 
                         // GRANTING ACCESSIBLITY FEATURE
                         if(cerosContext.featureFlags.Accessibility===true){
+                            const currentCarousel = carouselsArray[i]
 
-                            // NEW PART !!!!!!!!!!!!!
                             parentElem.style.width = `${pageWidth}px`
-                            parentElem.style.setProperty('overflow-x','scroll')
-                            // let carouselParent = draggableCarousel.parentElement
+                            parentElem.style.height = draggableCarousel.style.height
+                            parentElem.style.overflow = 'hidden'
+                            parentElem.style.setProperty('pointer-events', 'none')
+                            const leftValue = parseFloat(parentElem.style.left)
+                            if(leftValue<0){
+                                parentElem.style.left = '0px'
+                                draggableCarousel.style.left = `${leftValue}px`
+                            }
+                            parentElem.addEventListener('scroll', ee => {
+                                const maxScroll = Math.abs(currentCarousel.setup.range.width - Math.min(currentCarousel.setup.dragMovement.currentValue.x, 0))
+                                parentElem.scrollLeft = Math.min(parentElem.scrollLeft, maxScroll)
+                            })
 
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
                             const groupsArray = elementsArray.filter(gr => gr.classList.contains('group')===true && gr.style.display==='none')
                             const hotspotsArray = elementsArray.filter(hh => hh.classList.contains('hotspot')===true)
-
-                            const currentCarousel = carouselsArray[i]
                             for(let currentHotspot of hotspotsArray){
                                 currentHotspot.addEventListener('focus', () => currentCarousel.setup.displays = groupsArray.map(dis => dis.style.display))
                                 currentHotspot.addEventListener('click', () => addAccessibilityFunctionality(currentHotspot, currentCarousel, groupsArray))
