@@ -469,13 +469,13 @@
                             this.updateChildrenStyling(newDirection, true)
                         })
 
-                        pageScroll.addEventListener('scroll', ee => {
-                            this.setup.dragMovement.currentValue.x += -(pageScroll.scrollLeft/proportions)
-                            this.setup.dragMovement.currentValue.x = Math.max(this.setup.dragMovement.currentValue.x, this.setup.range.width)
-                            this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
-                            this.refreshOldValue()
-                            pageScroll.scrollLeft = 0
-                        })
+                        // pageScroll.addEventListener('scroll', ee => {
+                        //     this.setup.dragMovement.currentValue.x += -(pageScroll.scrollLeft/proportions)
+                        //     this.setup.dragMovement.currentValue.x = Math.max(this.setup.dragMovement.currentValue.x, this.setup.range.width)
+                        //     this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
+                        //     this.refreshOldValue()
+                        //     pageScroll.scrollLeft = 0
+                        // })
                         window.addEventListener('keydown', this.checkForInteraction)
                         this.updateChildrenStyling(newDirection, false)
                     }
@@ -723,6 +723,12 @@
 
                         // GRANTING ACCESSIBLITY FEATURE
                         if(cerosContext.featureFlags.Accessibility===true){
+
+                            // NEW PART !!!!!!!!!!!!!
+                            parentElem.style.width = `${pageWidth}px`
+                            parentElem.style.setProperty('overflow-x','scroll')
+                            // let carouselParent = draggableCarousel.parentElement
+
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
                             const groupsArray = elementsArray.filter(gr => gr.classList.contains('group')===true && gr.style.display==='none')
