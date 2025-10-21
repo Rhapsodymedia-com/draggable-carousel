@@ -462,6 +462,17 @@
                             
                             this.isSliding = false
                             this.isSnapping = false
+
+                            const par = this.mainElement.parentElement
+                            if(par.scrollLeft!=this.setup.dynamicScroll){
+                                this.setup.dragMovement.currentValue.x += -(par.scrollLeft/proportions)
+                                this.setup.dragMovement.currentValue.x = Math.max(this.setup.dragMovement.currentValue.x, this.setup.range.width)
+                                this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
+                                this.refreshOldValue()
+                                par.scrollLeft = 0
+                                this.setup.dynamicScroll = 0
+                            }
+
                             this.updateTime()
                             this.updateOnDragging()
                             this.switchStates(true)
@@ -690,7 +701,8 @@
                             viewport: {
                                 width: cerosContext.docVersion.viewportWidth,
                                 height: viewHeight
-                            }
+                            },
+                            dynamicScroll: parentElem.scrollLeft
                         }
                         
                         // STYLING CAROUSEL ELEMENT
@@ -731,12 +743,13 @@
                             //     parentElem.scrollLeft = Math.min(parentElem.scrollLeft, maxScroll)
                             // })
                             parentElem.addEventListener('scroll', ee => {
-                                currentCarousel.setup.dragMovement.currentValue.x += -(parentElem.scrollLeft/proportions)
-                                currentCarousel.setup.dragMovement.currentValue.x = Math.max(currentCarousel.setup.dragMovement.currentValue.x, currentCarousel.setup.range.width)
-                                currentCarousel.mainElement.style.transform = `translate3d(${currentCarousel.setup.dragMovement.currentValue.x}px, ${currentCarousel.setup.dragMovement.currentValue.y}px, 0px)`
-                                currentCarousel.refreshOldValue()
-                                parentElem.scrollLeft = 0
+                                currentCarousel.setup.dynamicScroll = parentElem.scrollLeft
                             })
+                            // currentCarousel.setup.dragMovement.currentValue.x += -(parentElem.scrollLeft/proportions)
+                            // currentCarousel.setup.dragMovement.currentValue.x = Math.max(currentCarousel.setup.dragMovement.currentValue.x, currentCarousel.setup.range.width)
+                            // currentCarousel.mainElement.style.transform = `translate3d(${currentCarousel.setup.dragMovement.currentValue.x}px, ${currentCarousel.setup.dragMovement.currentValue.y}px, 0px)`
+                            // currentCarousel.refreshOldValue()
+                            // parentElem.scrollLeft = 0
 
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
