@@ -445,6 +445,15 @@
                         }
                     }
 
+                    adjustParentScroll(){
+                        this.setup.dragMovement.currentValue.x += -(this.setup.accessibility.parent.scrollLeft/proportions)
+                        this.setup.dragMovement.currentValue.x = Math.max(this.setup.dragMovement.currentValue.x, this.setup.range.width)
+                        this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
+                        this.refreshOldValue()
+                        this.setup.accessibility.parent.scrollLeft = 0
+                        this.setup.accessibility.scrollValue = 0
+                    }
+
                     updateOnDragStart(){
                         let lastValue = 0
                         let newDirection = 1
@@ -462,17 +471,8 @@
                             
                             this.isSliding = false
                             this.isSnapping = false
-
-                            const par = this.mainElement.parentElement
-                            if(par.scrollLeft!=this.setup.dynamicScroll){
-                                this.setup.dragMovement.currentValue.x += -(par.scrollLeft/proportions)
-                                this.setup.dragMovement.currentValue.x = Math.max(this.setup.dragMovement.currentValue.x, this.setup.range.width)
-                                this.mainElement.style.transform = `translate3d(${this.setup.dragMovement.currentValue.x}px, ${this.setup.dragMovement.currentValue.y}px, 0px)`
-                                this.refreshOldValue()
-                                par.scrollLeft = 0
-                                this.setup.dynamicScroll = 0
-                            }
-
+                            if(this.setup.accessibility.parent.scrollLeft!=this.setup.accessibility.scrollValue)
+                                this.adjustParentScroll()
                             this.updateTime()
                             this.updateOnDragging()
                             this.switchStates(true)
@@ -637,7 +637,6 @@
                                 parentElem.style.top = `${mask[3]}px`
                                 parentElem.style.position = 'absolute'
                                 parentElem.style.overflow = 'hidden'
-                                parentElem.classList.add('carousel-parent')
                             }
                         }
                         
@@ -702,7 +701,10 @@
                                 width: cerosContext.docVersion.viewportWidth,
                                 height: viewHeight
                             },
-                            dynamicScroll: parentElem.scrollLeft
+                            accessibility: {
+                                parent: parentElem,
+                                scrollValue: parentElem.scrollLeft*1
+                            }
                         }
                         
                         // STYLING CAROUSEL ELEMENT
@@ -738,18 +740,7 @@
                                 parentElem.style.left = '0px'
                                 draggableCarousel.style.left = `${leftValue}px`
                             }
-                            // parentElem.addEventListener('scroll', ee => {
-                            //     const maxScroll = Math.abs(currentCarousel.setup.range.width - Math.min(currentCarousel.setup.dragMovement.currentValue.x, 0))
-                            //     parentElem.scrollLeft = Math.min(parentElem.scrollLeft, maxScroll)
-                            // })
-                            parentElem.addEventListener('scroll', ee => {
-                                currentCarousel.setup.dynamicScroll = parentElem.scrollLeft
-                            })
-                            // currentCarousel.setup.dragMovement.currentValue.x += -(parentElem.scrollLeft/proportions)
-                            // currentCarousel.setup.dragMovement.currentValue.x = Math.max(currentCarousel.setup.dragMovement.currentValue.x, currentCarousel.setup.range.width)
-                            // currentCarousel.mainElement.style.transform = `translate3d(${currentCarousel.setup.dragMovement.currentValue.x}px, ${currentCarousel.setup.dragMovement.currentValue.y}px, 0px)`
-                            // currentCarousel.refreshOldValue()
-                            // parentElem.scrollLeft = 0
+                            parentElem.addEventListener('scroll', ee => currentCarousel.setup.accessibility.scrollValue = parentElem.scrollLeft)
 
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
                             let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
