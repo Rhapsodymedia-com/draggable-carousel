@@ -314,7 +314,7 @@
                                             element.style.transitionProperty += `${comma}filter`
                                         }
                                         if(effectName==='width' || effectName==='height'){
-                                            initialValue = element.style.getPropertyValue(effectName)
+                                            initialValue = element.style.getPropertyValue(effectName) || element.firstChild.style.getPropertyValue(effectName)
                                             element.style.transitionProperty += `${comma}${effectName}`
                                         }
                                         element.style.transitionDuration += `${comma}${effectParameters.duration}ms`
