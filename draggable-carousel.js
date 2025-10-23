@@ -291,33 +291,36 @@
 
                                 // DEFINING DEFAULT VALUES FOR CHILDREN PROPERTIES WHEN A DRAGGING ISN'T HAPPENING
                                 if(layer.idleStates==undefined){
+                                    let currentElem = element
                                     let initialValue = effectParameters.isProgressive===true ? 0 : 1
 
                                     let comma = ', '
-                                    if(element.style.getPropertyValue('transition-property')==='none'){
+                                    if(currentElem.style.getPropertyValue('transition-property')==='none'){
                                         comma = ''
-                                        element.style.setProperty('transition-property', comma)
-                                        element.style.setProperty('transition-duration', comma)
+                                        currentElem.style.setProperty('transition-property', comma)
+                                        currentElem.style.setProperty('transition-duration', comma)
                                     }
                                     if(effectName==='rotate' || effectName==='skewX' || effectName==='skewY'){
                                         initialValue = '0deg'
-                                        element.style.transitionProperty += `${comma}transform`
-                                        element.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        currentElem.style.transitionProperty += `${comma}transform`
+                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
                                     if(effectName==='scale' || effectName==='opacity'){
-                                        element.style.transitionProperty += `${comma}${effectName}`
-                                        element.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        currentElem.style.transitionProperty += `${comma}${effectName}`
+                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
                                     if(effectName==='blur' || effectName==='width' || effectName==='height'){
                                         if(effectName==='blur'){
                                             initialValue = '0px'
-                                            element.style.transitionProperty += `${comma}filter`
+                                            currentElem.style.transitionProperty += `${comma}filter`
                                         }
                                         if(effectName==='width' || effectName==='height'){
-                                            initialValue = element.style.getPropertyValue(effectName) || element.firstChild.style.getPropertyValue(effectName)
-                                            element.style.transitionProperty += `${comma}${effectName}`
+                                            if(currentElem.style.getPropertyValue(effectName)==false)
+                                                currentElem = element.firstChild
+                                            initialValue = currentElem.style.getPropertyValue(effectName)
+                                            currentElem.style.transitionProperty += `${comma}${effectName}`
                                         }
-                                        element.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
 
                                     initialStates[effectName] ??= initialValue
@@ -329,9 +332,9 @@
                                 switch(effectName){
                                     case 'width':
                                     case 'height':
-                                        let currentElem = element.querySelector('svg, img') ?? element
+                                        let nod = element.querySelector('svg, img') ?? element
                                         let len = check ? `${effectParameters.intensinity*progressRange*parseFloat(idleState)}px` : idleState
-                                        currentElem.style.setProperty(effectName, len)
+                                        nod.style.setProperty(effectName, len)
                                         break
                                     case 'rotate':
                                     case 'skewX':
