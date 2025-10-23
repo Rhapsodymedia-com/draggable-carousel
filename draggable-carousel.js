@@ -291,39 +291,40 @@
 
                                 // DEFINING DEFAULT VALUES FOR CHILDREN PROPERTIES WHEN A DRAGGING ISN'T HAPPENING
                                 if(layer.idleStates==undefined){
-                                    let currentElem = element
+                                    const currentElement = element
+                                    let ele = currentElement
                                     let initialValue = effectParameters.isProgressive===true ? 0 : 1
 
                                     let comma = ', '
-                                    if(currentElem.style.getPropertyValue('transition-property')==='none'){
+                                    if(ele.style.getPropertyValue('transition-property')==='none'){
                                         comma = ''
-                                        currentElem.style.setProperty('transition-property', comma)
-                                        currentElem.style.setProperty('transition-duration', comma)
+                                        ele.style.setProperty('transition-property', comma)
+                                        ele.style.setProperty('transition-duration', comma)
                                     }
                                     if(effectName==='rotate' || effectName==='skewX' || effectName==='skewY'){
                                         initialValue = '0deg'
-                                        currentElem.style.transitionProperty += `${comma}transform`
-                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        ele.style.transitionProperty += `${comma}transform`
+                                        ele.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
                                     if(effectName==='scale' || effectName==='opacity'){
-                                        currentElem.style.transitionProperty += `${comma}${effectName}`
-                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        ele.style.transitionProperty += `${comma}${effectName}`
+                                        ele.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
                                     if(effectName==='blur' || effectName==='width' || effectName==='height'){
                                         if(effectName==='blur'){
                                             initialValue = '0px'
-                                            currentElem.style.transitionProperty += `${comma}filter`
+                                            ele.style.transitionProperty += `${comma}filter`
                                         }
                                         if(effectName==='width' || effectName==='height'){
-                                            if(currentElem.style.getPropertyValue(effectName)==false){
-                                                currentElem = element.firstChild
-                                                currentElem.style.transitionProperty = ''
-                                                currentElem.style.transitionDuration = ''
+                                            if(ele.style.getPropertyValue(effectName)==false){
+                                                ele = element.firstChild
+                                                ele.style.transitionProperty = ''
+                                                ele.style.transitionDuration = ''
                                             }
-                                            initialValue = currentElem.style.getPropertyValue(effectName)
-                                            currentElem.style.transitionProperty += `${comma}${effectName}`
+                                            initialValue = ele.style.getPropertyValue(effectName)
+                                            ele.style.transitionProperty += `${comma}${effectName}`
                                         }
-                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        ele.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
 
                                     initialStates[effectName] ??= initialValue
@@ -750,7 +751,7 @@
                             parentElem.addEventListener('scroll', ee => currentCarousel.setup.accessibility.scrollValue = parentElem.scrollLeft)
 
                             let objectsArray = draggableCarousels[i].findAllComponents().layers
-                            let elementsArray = objectsArray.map(ele => document.getElementById(ele.id))
+                            let elementsArray = objectsArray.map(el => document.getElementById(el.id))
                             const groupsArray = elementsArray.filter(gr => gr.classList.contains('group')===true && gr.style.display==='none')
                             const hotspotsArray = elementsArray.filter(hh => hh.classList.contains('hotspot')===true)
                             for(let currentHotspot of hotspotsArray){
