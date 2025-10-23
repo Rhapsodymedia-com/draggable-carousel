@@ -329,8 +329,9 @@
                                 switch(effectName){
                                     case 'width':
                                     case 'height':
+                                        let currentElem = element.querySelector('svg, img') ?? element
                                         let len = check ? `${effectParameters.intensinity*progressRange*parseFloat(idleState)}px` : idleState
-                                        element.style.setProperty(effectName, len)
+                                        currentElem.style.setProperty(effectName, len)
                                         break
                                     case 'rotate':
                                     case 'skewX':
