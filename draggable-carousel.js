@@ -291,40 +291,42 @@
 
                                 // DEFINING DEFAULT VALUES FOR CHILDREN PROPERTIES WHEN A DRAGGING ISN'T HAPPENING
                                 if(layer.idleStates==undefined){
-                                    const currentElement = element
-                                    let ele = currentElement
+                                    let currentElem = element
                                     let initialValue = effectParameters.isProgressive===true ? 0 : 1
 
                                     let comma = ', '
-                                    if(ele.style.getPropertyValue('transition-property')==='none'){
+                                    if(currentElem.style.getPropertyValue('transition-property')==='none'){
                                         comma = ''
-                                        ele.style.setProperty('transition-property', comma)
-                                        ele.style.setProperty('transition-duration', comma)
+                                        currentElem.style.setProperty('transition-property', comma)
+                                        currentElem.style.setProperty('transition-duration', comma)
                                     }
                                     if(effectName==='rotate' || effectName==='skewX' || effectName==='skewY'){
                                         initialValue = '0deg'
-                                        ele.style.transitionProperty += `${comma}transform`
-                                        ele.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        currentElem.style.transitionProperty += `${comma}transform`
+                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
                                     if(effectName==='scale' || effectName==='opacity'){
-                                        ele.style.transitionProperty += `${comma}${effectName}`
-                                        ele.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        currentElem.style.transitionProperty += `${comma}${effectName}`
+                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
                                     if(effectName==='blur' || effectName==='width' || effectName==='height'){
                                         if(effectName==='blur'){
                                             initialValue = '0px'
-                                            ele.style.transitionProperty += `${comma}filter`
+                                            currentElem.style.transitionProperty += `${comma}filter`
                                         }
                                         if(effectName==='width' || effectName==='height'){
-                                            if(ele.style.getPropertyValue(effectName)==false){
-                                                ele = element.firstChild
-                                                ele.style.transitionProperty = ''
-                                                ele.style.transitionDuration = ''
+                                            if(currentElem.style.getPropertyValue(effectName)==false){
+                                                currentElem = element.firstChild
+                                                if(currentElem.style.getPropertyValue('transition-property')==='none'){
+                                                    comma = ''
+                                                    currentElem.style.setProperty('transition-property', comma)
+                                                    currentElem.style.setProperty('transition-duration', comma)
+                                                }
                                             }
-                                            initialValue = ele.style.getPropertyValue(effectName)
-                                            ele.style.transitionProperty += `${comma}${effectName}`
+                                            initialValue = currentElem.style.getPropertyValue(effectName)
+                                            currentElem.style.transitionProperty += `${comma}${effectName}`
                                         }
-                                        ele.style.transitionDuration += `${comma}${effectParameters.duration}ms`
+                                        currentElem.style.transitionDuration += `${comma}${effectParameters.duration}ms`
                                     }
 
                                     initialStates[effectName] ??= initialValue
